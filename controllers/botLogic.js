@@ -20,14 +20,14 @@ console.log('City:', city);
 };
 
 async function getCityCoordinates(city) {
-    const openTripMapApiKey = '5ae2e3f221c38a28845f05b6a04d63d52bbaff23ce1750f6ee143cb8'; // Replace with your OpenTripMap API key
+    const openTripMapApiKey = ''; // Replace with your OpenTripMap API key
     const geoResponse = await fetch(`https://api.opentripmap.com/0.1/en/places/geoname?name=${city}&apikey=${openTripMapApiKey}`);
     const geoData = await geoResponse.json();
     return { lat: geoData.lat, lon: geoData.lon };
 }
 
 async function fetchMuseums(lat, lon) {
-    const openTripMapApiKey = '5ae2e3f221c38a28845f05b6a04d63d52bbaff23ce1750f6ee143cb8'; // Replace with your OpenTripMap API key
+    const openTripMapApiKey = ''; // Replace with your OpenTripMap API key
     const radius = 20000; // 20 km radius
     const kinds = 'museums';
     const museumsResponse = await fetch(`https://api.opentripmap.com/0.1/en/places/radius?radius=${radius}&lon=${lon}&lat=${lat}&kinds=${kinds}&apikey=${openTripMapApiKey}`);
@@ -41,7 +41,7 @@ async function fetchMuseums(lat, lon) {
 
 async function searchImages(query) {
     console.log('Searching for images of', query);
-    const UNSPLASH_ACCESS_KEY = 'GYRI3vP7HKIaJSeoReKCFDDDHmEBC04tfs0EYoqX1b8';
+    const UNSPLASH_ACCESS_KEY = '';
     try {
         const response = await axios.get('https://api.unsplash.com/search/photos', {
             params: {
