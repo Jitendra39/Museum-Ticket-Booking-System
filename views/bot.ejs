@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/stylesheets/bot.css">
+</head>
+<body>
+  <div id="container">
+    <div class="bot">
+      <header>
+        <div class="content">
+          <div class="name">Aether Coders</div>
+          <div class="decreption">get help 24X7</div>
+        </div>
+        <div class="close" style="background-color: transparent">
+          <i class="ri-close-large-line"></i>
+        </div>
+      </header>
+      <main>
+        <div class="message-box left">
+          <p>Hi!</p>
+        </div>
+        <div class="message-box left">
+          <p>I'm Aether Bot. I'm here to help you with any questions you might have about Museum Ticket Booking Process.</p>
+        </div>
+        <div class="message-box left">
+          <p>How can I help you today?</p>
+        </div>
+        <div class="Questions"></div>
+        <div class="opponentResponse">
+          <div class="rightSideResponse"></div>
+        </div>
+      </main>
+      <div class="footer">
+        <div class="chat-input">
+          <input type="text" class="message-input" placeholder="Type your message here">
+          <button class="send-button">Send</button>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <script>
+    let ExistingQeustionsAndResponses = [];
+    let temperaryQuestions = [];
+    let QuestionsClicked = '';
+  
+    window.addEventListener('DOMContentLoaded', () => {
+      temperaryQuestions.push('Book a Ticket', 'Cancel Ticket', 'Complaint Registration', 'General Questions Answer', 'Top 10 Museums in India');
+      initializeQuestions();
+    });
+  
+    function initializeQuestions() {
+      const Questions = document.querySelector('.Questions');
+      Questions.innerHTML = ''; // Clear previous questions
+      temperaryQuestions.forEach(question => {
+        const questionBox = document.createElement('div');
+        questionBox.classList.add('message-box', 'left', 'Question');
+        questionBox.innerHTML = `<p>${question}</p>`;
+        Questions.appendChild(questionBox);
+  
+        questionBox.addEventListener('click', () => handleQuestionClick(questionBox, Questions));
+      });
+    }
+  
+    function handleQuestionClick(questionBox, Questions) {
+      const opponentResponse = document.querySelector('.opponentResponse');
+      const questionText = questionBox.querySelector('p').textContent;
+      console.log(questionText);
+  
+      Questions.innerHTML = '';
+      const rightsidebox = document.createElement('div');
+      rightsidebox.classList.add('rightSideResponse');
+      const clickedQuestionBox = document.createElement('div');
+      clickedQuestionBox.classList.add('message-box', 'right');
+      clickedQuestionBox.innerHTML = `<p>${questionText}</p>`;
+      rightsidebox.appendChild(clickedQuestionBox);
+      opponentResponse.appendChild(rightsidebox);
+  
+      QuestionsClicked = questionText;
+      handleQuestionChange();
+    }
+  
+
+
+    function handleQuestionChange() {
+      if (QuestionsClicked === 'Book a Ticket') {
+        BookTicket();
+      } else if (QuestionsClicked === 'Current Location') {
+        getUserCurrentLocation()
+          .then(location => {
+            console.log(`City: ${location.city}, State: ${location.state}, State District: ${location.state_district}`);
+            displayLocation(location);
+          })
+          .catch(error => console.error('Error:', error));
+      }else if(QuestionsClicked === 'Enter Location'){
+        footer.style.visibility = 'visible';
+        inputBox.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            const location = inputBox.value;
+            console.log(location);
+            inputBox.value = '';
+            footer.style.visibility = 'hidden';
+          }
+        });
+      }
+    }
+
+
+
+  
+    function BookTicket() {
+      const footer = document.querySelector('.footer');
+      const inputBox = document.querySelector('.message-input');
+      temperaryQuestions = ['Current Location', 'Enter Location'];
+      initializeQuestions();
+ 
+    }
+  
+    function getUserCurrentLocation() {
+      return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(position => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            console.log(latitude, longitude);
+  
+            reverseGeocode(latitude, longitude)
+              .then(location => resolve(location))
+              .catch(error => reject(error));
+          }, error => {
+            console.error('Geolocation error:', error);
+            reject(error);
+          }, {
+            enableHighAccuracy: true, // Request high accuracy
+            timeout: 5000, // Set a timeout
+            maximumAge: 0 // Do not use cached location
+          });
+        } else {
+          console.error('Geolocation is not supported by this browser.');
+          reject(new Error('Geolocation is not supported by this browser.'));
+        }
+      });
+    }
+  
+    function reverseGeocode(latitude, longitude) {
+      return fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
+        .then(response => response.json())
+        .then(data => {
+          const address = data.address;
+          const city = address.city || address.town || address.village || '';
+          const state = address.state || '';
+          const state_district = address.state_district || '';
+          return { city, state, state_district };
+        });
+    }
+  
+    function displayLocation(location) {
+      const opponentResponse = document.querySelector('.opponentResponse');
+      const locationInfo = document.createElement('div');
+      locationInfo.classList.add('message-box', 'left');
+      locationInfo.innerHTML = `<p>City: ${location.city}, State: ${location.state}, State District: ${location.state_district}</p>`;
+      opponentResponse.appendChild(locationInfo);
+    }
+  </script>
+</body>
+</html>

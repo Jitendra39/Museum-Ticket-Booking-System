@@ -1,0 +1,210 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Museum Finder</title>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+     <style>
+         .animate-bounce {
+             animation: bounce 1s infinite;
+         }
+     </style>
+ </head>
+ <body class="bg-gradient-to-r from-blue-50 to-blue-100 h-screen p-3 flex flex-col justify-center items-center">
+     <form id="cityForm" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg shadow-lg bg-white py-6 px-4 transition-all duration-500 transform hover:scale-105">
+         <h1 class="text-4xl font-bold text-blue-500 mb-4 animate-bounce">Museum Finder</h1>
+         <input
+             id="city"
+             required
+             class="border border-gray-300 rounded w-full my-2 p-3 transition-all duration-300 focus:border-blue-400 focus:shadow-lg"
+             placeholder="Enter a city"
+         />
+         <button
+             type="submit"
+             id="searchButton"
+             class="bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-all duration-300"
+         >
+             Search Museums
+         </button>
+     </form>
+     
+     <div id="museumsContainer" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg bg-white my-4 shadow-lg transition-all duration-500 transform hover:scale-105">
+         <div id="museumsList" class="p-4"></div>
+     </div>
+ 
+     <div id="museumDetails" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg bg-white my-4 shadow-lg p-4 hidden">
+         <h2 id="museumName" class="text-xl font-bold text-blue-500"></h2>
+         <img id="museumImage" class="rounded-lg shadow-md mx-auto my-2">
+         <p id="museumDescription" class="text-gray-700 my-2"></p>
+         <p id="museumAddress" class="text-gray-700 my-2"></p>
+         <p id="museumOpeningHours" class="text-gray-500"></p>
+         <p id="museumTicketPrice" class="text-gray-600 italic"></p>
+     </div>
+ 
+     <script>
+         let museumsList = [];
+ 
+         document.getElementById('cityForm').addEventListener('submit', async function(e) {
+             e.preventDefault();
+             const city = document.getElementById('city').value;
+             const museumsContainer = document.getElementById('museumsList');
+             const searchButton = document.getElementById('searchButton');
+             const museumDetails = document.getElementById('museumDetails');
+ 
+             // Clear previous results
+             museumsContainer.innerHTML = '';
+             museumDetails.classList.add('hidden');
+ 
+             // Disable button while waiting for response
+             searchButton.disabled = true;
+             searchButton.classList.add('opacity-50', 'cursor-not-allowed');
+             museumsContainer.innerHTML = "Loading museums...";
+ 
+             try {
+                 const response = await fetch(`http://localhost:8000/api/museumName/${city}`);
+                 const museums = await response.json();
+                 museumsList = museums;
+                 console.log(museumsList);
+ 
+                 if (museums.length > 0) {
+                     const museumDetails = await fetchMuseumDetails(city, museums);
+                     displayMuseums(museumDetails, museumsContainer);
+                 } else {
+                     museumsContainer.innerHTML = 'No museums found in this city.';
+                 }
+             } catch (error) {
+                 console.error(error);
+                 museumsContainer.innerHTML = "Sorry - Something went wrong. Please try again!";
+             }
+ 
+             // Enable button after response is received
+             searchButton.disabled = false;
+             searchButton.classList.remove('opacity-50', 'cursor-not-allowed');
+         });
+ 
+        
+ 
+         function displayMuseums(museumDetails, museumsContainer) {
+             museumDetails.forEach((museum, index) => {
+                 const museumDiv = document.createElement('div');
+                 museumDiv.classList.add('cursor-pointer', 'text-xl', 'text-blue-500', 'my-2', 'hover:underline');
+                 museumDiv.textContent = museum.name;
+ 
+                 museumDiv.addEventListener('click', () => displayMuseumDetails(index));
+ 
+                 museumsContainer.appendChild(museumDiv);
+             });
+         }
+ 
+         function displayMuseumDetails(index) {
+             const museum = museumsList[index];
+             document.getElementById('museumName').textContent = museum.name;
+             document.getElementById('museumAddress').textContent = museum.address;
+             document.getElementById('museumOpeningHours').textContent = `Opening Hours: ${museum.openingTime} - ${museum.closingTime}`;
+             document.getElementById('museumTicketPrice').textContent = `Ticket Price: ${museum.price}`;
+             document.getElementById('museumDescription').textContent = museum.description;
+ 
+             if (museum.imageLink) {
+                 document.getElementById('museumImage').src = museum.imageLink;
+                 document.getElementById('museumImage').classList.remove('hidden');
+             } else {
+                 document.getElementById('museumImage').classList.add('hidden');
+             }
+ 
+             // Show museum details
+             document.getElementById('museumDetails').classList.remove('hidden');
+         }
+     </script>
+ </body>
+ </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museum Info Request</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-blue-100 h-screen p-3 flex flex-col justify-center items-center">
+    <form id="museumInfoForm" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg shadow-lg bg-white py-6 px-4 transition-all duration-500 transform hover:scale-105">
+        <h1 class="text-4xl font-bold text-blue-500 mb-4">Museum Info Request</h1>
+        <input
+            id="city"
+            required
+            class="border border-gray-300 rounded w-full my-2 p-3 transition-all duration-300 focus:border-blue-400 focus:shadow-lg"
+            placeholder="Enter a city"
+        />
+        <textarea
+            id="museums"
+            required
+            class="border border-gray-300 rounded w-full my-2 p-3 transition-all duration-300 focus:border-blue-400 focus:shadow-lg"
+            placeholder="Enter museum names (comma-separated)"
+        ></textarea>
+        <button
+            type="submit"
+            id="submitButton"
+            class="bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-all duration-300"
+        >
+            Get Museum Info
+        </button>
+    </form>
+
+    <div id="responseContainer" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg bg-white my-4 shadow-lg p-4 hidden">
+        <h2 class="text-xl font-bold text-blue-500">Response</h2>
+        <pre id="responseText" class="text-gray-700 my-2"></pre>
+    </div>
+
+    <script>
+        document.getElementById('museumInfoForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const city = document.getElementById('city').value;
+            const museums = document.getElementById('museums').value.split(',').map(name => ({ name: name.trim() }));
+            const submitButton = document.getElementById('submitButton');
+            const responseContainer = document.getElementById('responseContainer');
+            const responseText = document.getElementById('responseText');
+
+            // Disable button while waiting for response
+            submitButton.disabled = true;
+            submitButton.classList.add('opacity-50', 'cursor-not-allowed');
+
+            try {
+                const response = await fetch('http://localhost:8000/api/museumInfo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ city, museums }),
+                });
+
+                const data = await response.json();
+                console.log(data);
+                responseText.textContent = JSON.stringify(data, null, 2);
+                responseContainer.classList.remove('hidden');
+            } catch (error) {
+                console.error('Error:', error);
+                responseText.textContent = 'Sorry - Something went wrong. Please try again!';
+                responseContainer.classList.remove('hidden');
+            }
+
+            // Enable button after response is received
+            submitButton.disabled = false;
+            submitButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        });
+    </script>
+</body>
+</html> -->

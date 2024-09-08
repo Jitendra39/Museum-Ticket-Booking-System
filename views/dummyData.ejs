@@ -1,0 +1,1121 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat AI with Images</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <style>
+        .animate-bounce {
+            animation: bounce 1s infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-blue-100 h-screen p-3 flex flex-col justify-center items-center">
+    <form id="chatForm" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg shadow-lg bg-white py-6 px-4 transition-all duration-500 transform hover:scale-105">
+        <a href="https://github.com/Vishesh-Pandey/chat-ai" target="_blank" rel="noopener noreferrer">
+            <h1 class="text-4xl font-bold text-blue-500 mb-4 animate-bounce">Chat AI</h1>
+        </a>
+        <textarea
+            id="question"
+            required
+            class="border border-gray-300 rounded w-full my-2 min-h-fit p-3 transition-all duration-300 focus:border-blue-400 focus:shadow-lg"
+            placeholder="Ask anything"
+        ></textarea>
+        <button
+            type="submit"
+            id="generateButton"
+            class="bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-all duration-300"
+        >
+            Generate answer
+        </button>
+    </form>
+    <div id="answerContainer" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg bg-white my-4 shadow-lg transition-all duration-500 transform hover:scale-105">
+        <div id="answer" class="p-4"></div>
+        <div id="imageContainer" class="p-4"></div>
+    </div>
+
+    <script>
+        document.getElementById('chatForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const question = document.getElementById('question').value;
+            const answerContainer = document.getElementById('answer');
+            const imageContainer = document.getElementById('imageContainer');
+            const generateButton = document.getElementById('generateButton');
+
+            // Clear previous results
+            answerContainer.innerHTML = '';
+            imageContainer.innerHTML = '';
+
+            // Disable button while waiting for response
+            generateButton.disabled = true;
+            generateButton.classList.add('opacity-50', 'cursor-not-allowed');
+            answerContainer.innerHTML = "Loading your answer... <br> It might take up to 10 seconds";
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyA-dEa42tYpukr3c71IlT_ZvkR16YHLt5w`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `List all museums in ${question} with their name, price, opening time, closing time, address, latitude, longitude, and image link.` }] }],
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                const answerText = data.candidates[0].content.parts[0].text;
+                const imageUrl = data.candidates[0].content.parts[1]?.image; // Assuming the image URL is in part 2
+
+                // Display the text response
+                answerContainer.innerHTML = answerText;
+
+                // Display the image if it exists
+                if (imageUrl) {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = imageUrl;
+                    imgElement.alt = "Generated Image";
+                    imgElement.classList.add('mx-auto', 'mt-4', 'rounded-lg', 'shadow-md');
+                    imageContainer.appendChild(imgElement);
+                }
+
+            } catch (error) {
+                console.error(error);
+                answerContainer.innerHTML = "Sorry - Something went wrong. Please try again!";
+            }
+
+            // Enable button after response is received
+            generateButton.disabled = false;
+            generateButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        });
+    </script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museum Finder</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <style>
+        .animate-bounce {
+            animation: bounce 1s infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-blue-100 h-screen p-3 flex flex-col justify-center items-center">
+    <form id="cityForm" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg shadow-lg bg-white py-6 px-4 transition-all duration-500 transform hover:scale-105">
+        <h1 class="text-4xl font-bold text-blue-500 mb-4 animate-bounce">Museum Finder</h1>
+        <input
+            id="city"
+            required
+            class="border border-gray-300 rounded w-full my-2 p-3 transition-all duration-300 focus:border-blue-400 focus:shadow-lg"
+            placeholder="Enter a city"
+        />
+        <button
+            type="submit"
+            id="searchButton"
+            class="bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-all duration-300"
+        >
+            Search Museums
+        </button>
+    </form>
+    
+    <div id="museumsContainer" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg bg-white my-4 shadow-lg transition-all duration-500 transform hover:scale-105">
+        <div id="museumsList" class="p-4"></div>
+    </div>
+
+    <script>
+        document.getElementById('cityForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const city = document.getElementById('city').value;
+            const museumsContainer = document.getElementById('museumsList');
+            const searchButton = document.getElementById('searchButton');
+
+            // Clear previous results
+            museumsContainer.innerHTML = '';
+
+            // Disable button while waiting for response
+            searchButton.disabled = true;
+            searchButton.classList.add('opacity-50', 'cursor-not-allowed');
+            museumsContainer.innerHTML = "Loading museums...";
+
+            try {
+                const apiKey = '5ae2e3f221c38a28845f05b6a04d63d52bbaff23ce1750f6ee143cb8'; // Replace with your OpenTripMap API key
+
+                // First, get the city coordinates
+                const geoResponse = await fetch(`https://api.opentripmap.com/0.1/en/places/geoname?name=${city}&apikey=${apiKey}`);
+                const geoData = await geoResponse.json();
+                const cityLat = geoData.lat;
+                const cityLon = geoData.lon;
+
+                // Now fetch museums around the city coordinates
+                const radius = 10000; // 100 km radius
+                const kinds = 'museums';
+                const museumsResponse = await fetch(`https://api.opentripmap.com/0.1/en/places/radius?radius=${radius}&lon=${cityLon}&lat=${cityLat}&kinds=${kinds}&apikey=${apiKey}`);
+                const museumsData = await museumsResponse.json();
+
+                // Clear the loading message
+                museumsContainer.innerHTML = '';
+
+                if (museumsData.features && museumsData.features.length > 0) {
+                    // Fetch detailed info for each museum
+                    for (const museum of museumsData.features) {
+                        const museumDetailsResponse = await fetch(`https://api.opentripmap.com/0.1/en/places/xid/${museum.properties.xid}?apikey=${apiKey}`);
+                        const museumDetails = await museumDetailsResponse.json();
+                 
+                        console.log(museumDetails.address);
+
+                        const museumDiv = document.createElement('div');
+                        museumDiv.classList.add('bg-gray-50', 'rounded-lg', 'shadow-md', 'my-4', 'p-4');
+                        
+                        // Museum name
+                        const name = document.createElement('h2');
+                        name.classList.add('text-xl', 'font-bold', 'text-blue-500');
+                        name.textContent = museumDetails.name;
+                        museumDiv.appendChild(name);
+
+                        // Museum photo if available
+                        if (museumDetails.image) {
+                            const img = document.createElement('img');
+                            img.src = museumDetails.image;
+                            img.alt = museumDetails.name;
+                            img.classList.add('rounded-lg', 'shadow-md', 'mx-auto', 'my-2');
+                            museumDiv.appendChild(img);
+                        }
+
+                        // Museum description
+                        const description = document.createElement('p');
+                        description.classList.add('text-gray-700', 'my-2');
+                        description.textContent = museumDetails.wikipedia_extracts ? museumDetails.wikipedia_extracts.text : 'No description available';
+                        museumDiv.appendChild(description);
+
+                        // Opening hours if available (mock data as OpenTripMap does not provide this directly)
+                        const openingHours = document.createElement('p');
+                        openingHours.classList.add('text-gray-500');
+                        openingHours.textContent = `Opening Hours: 10:00 AM - 6:00 PM (Mock Data)`;
+                        museumDiv.appendChild(openingHours);
+
+                        // Ticket price - example: mock data, should get from another source
+                        const ticketPrice = document.createElement('p');
+                        ticketPrice.classList.add('text-gray-600', 'italic');
+                        ticketPrice.textContent = `Ticket Price: $${(Math.random() * 20 + 10).toFixed(2)} (Mock Data)`;
+                        museumDiv.appendChild(ticketPrice);
+
+                        // Append museum div to the list
+                        museumsContainer.appendChild(museumDiv);
+                    }
+                } else {
+                    museumsContainer.innerHTML = 'No museums found in this city.';
+                }
+            } catch (error) {
+                console.error(error);
+                museumsContainer.innerHTML = "Sorry - Something went wrong. Please try again!";
+            }
+
+            // Enable button after response is received
+            searchButton.disabled = false;
+            searchButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        });
+    </script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museum Finder</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <style>
+        .animate-bounce {
+            animation: bounce 1s infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-blue-100 h-screen p-3 flex flex-col justify-center items-center">
+    <form id="cityForm" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg shadow-lg bg-white py-6 px-4 transition-all duration-500 transform hover:scale-105">
+        <h1 class="text-4xl font-bold text-blue-500 mb-4 animate-bounce">Museum Finder</h1>
+        <input
+            id="city"
+            required
+            class="border border-gray-300 rounded w-full my-2 p-3 transition-all duration-300 focus:border-blue-400 focus:shadow-lg"
+            placeholder="Enter a city"
+        />
+        <button
+            type="submit"
+            id="searchButton"
+            class="bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-all duration-300"
+        >
+            Search Museums
+        </button>
+    </form>
+    
+    <div id="museumsContainer" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg bg-white my-4 shadow-lg transition-all duration-500 transform hover:scale-105">
+        <div id="museumsList" class="p-4"></div>
+    </div>
+
+    <div id="museumDetails" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg bg-white my-4 shadow-lg p-4 hidden">
+        <h2 id="museumName" class="text-xl font-bold text-blue-500"></h2>
+        <img id="museumImage" class="rounded-lg shadow-md mx-auto my-2">
+        <p id="museumDescription" class="text-gray-700 my-2"></p>
+        <p id="museumAddress" class="text-gray-700 my-2"></p>
+        <p id="museumOpeningHours" class="text-gray-500"></p>
+        <p id="museumTicketPrice" class="text-gray-600 italic"></p>
+    </div>
+
+    <script>
+        let museumsList = [];
+
+        document.getElementById('cityForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const city = document.getElementById('city').value;
+            const museumsContainer = document.getElementById('museumsList');
+            const searchButton = document.getElementById('searchButton');
+            const museumDetails = document.getElementById('museumDetails');
+
+            // Clear previous results
+            museumsContainer.innerHTML = '';
+            museumDetails.classList.add('hidden');
+
+            // Disable button while waiting for response
+            searchButton.disabled = true;
+            searchButton.classList.add('opacity-50', 'cursor-not-allowed');
+            museumsContainer.innerHTML = "Loading museums...";
+
+            try {
+                const apiKey = '5ae2e3f221c38a28845f05b6a04d63d52bbaff23ce1750f6ee143cb8'; // Replace with your OpenTripMap API key
+
+                // Get city coordinates
+                const geoResponse = await fetch(`https://api.opentripmap.com/0.1/en/places/geoname?name=${city}&apikey=${apiKey}`);
+                const geoData = await geoResponse.json();
+                const cityLat = geoData.lat;
+                const cityLon = geoData.lon;
+
+                // Fetch museums around the city coordinates
+                const radius = 10000; // 100 km radius
+                const kinds = 'museums';
+                const museumsResponse = await fetch(`https://api.opentripmap.com/0.1/en/places/radius?radius=${radius}&lon=${cityLon}&lat=${cityLat}&kinds=${kinds}&apikey=${apiKey}`);
+                const museumsData = await museumsResponse.json();
+
+                // Clear loading message
+                museumsContainer.innerHTML = '';
+
+                if (museumsData.features && museumsData.features.length > 0) {
+                    museumsList = museumsData.features.map(museum => ({
+                        name: museum.properties.name,
+                        address: museum.properties.address || 'No address available',
+                        image: museum.properties.image || null,
+                        price: `$${(Math.random() * 20 + 10).toFixed(2)} (Mock Data)`,
+                        openingHours: '10:00 AM - 6:00 PM (Mock Data)', // OpenTripMap doesn't provide actual hours
+                        lat: museum.geometry.coordinates[1],
+                        lon: museum.geometry.coordinates[0]
+                    }));
+
+                    // Display museum names
+                    museumsList.forEach((museum, index) => {
+                        const museumDiv = document.createElement('div');
+                        museumDiv.classList.add('cursor-pointer', 'text-xl', 'text-blue-500', 'my-2', 'hover:underline');
+                        museumDiv.textContent = museum.name;
+
+                        museumDiv.addEventListener('click', () => displayMuseumDetails(index));
+
+                        museumsContainer.appendChild(museumDiv);
+                    });
+                } else {
+                    museumsContainer.innerHTML = 'No museums found in this city.';
+                }
+            } catch (error) {
+                console.error(error);
+                museumsContainer.innerHTML = "Sorry - Something went wrong. Please try again!";
+            }
+
+            // Enable button after response is received
+            searchButton.disabled = false;
+            searchButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        });
+
+        function displayMuseumDetails(index) {
+            const museum = museumsList[index];
+            document.getElementById('museumName').textContent = museum.name;
+            document.getElementById('museumAddress').textContent = museum.address;
+            document.getElementById('museumOpeningHours').textContent = `Opening Hours: ${museum.openingHours}`;
+            document.getElementById('museumTicketPrice').textContent = `Ticket Price: ${museum.price}`;
+            
+            if (museum.image) {
+                document.getElementById('museumImage').src = museum.image;
+                document.getElementById('museumImage').classList.remove('hidden');
+            } else {
+                document.getElementById('museumImage').classList.add('hidden');
+            }
+
+            // Show museum details
+            document.getElementById('museumDetails').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat AI with Images</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <style>
+        .animate-bounce {
+            animation: bounce 1s infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-blue-100 h-screen p-3 flex flex-col justify-center items-center">
+    <form id="chatForm" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg shadow-lg bg-white py-6 px-4 transition-all duration-500 transform hover:scale-105">
+        <a href="https://github.com/Vishesh-Pandey/chat-ai" target="_blank" rel="noopener noreferrer">
+            <h1 class="text-4xl font-bold text-blue-500 mb-4 animate-bounce">Chat AI</h1>
+        </a>
+        <textarea
+            id="question"
+            required
+            class="border border-gray-300 rounded w-full my-2 min-h-fit p-3 transition-all duration-300 focus:border-blue-400 focus:shadow-lg"
+            placeholder="Ask anything"
+        ></textarea>
+        <button
+            type="submit"
+            id="generateButton"
+            class="bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-all duration-300"
+        >
+            Generate answer
+        </button>
+    </form>
+    <div id="answerContainer" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg bg-white my-4 shadow-lg transition-all duration-500 transform hover:scale-105">
+        <div id="answer" class="p-4"></div>
+        <div id="imageContainer" class="p-4"></div>
+    </div>
+
+    <script>
+        document.getElementById('chatForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const question = document.getElementById('question').value;
+            const answerContainer = document.getElementById('answer');
+            const imageContainer = document.getElementById('imageContainer');
+            const generateButton = document.getElementById('generateButton');
+
+            // Clear previous results
+            answerContainer.innerHTML = '';
+            imageContainer.innerHTML = '';
+
+            // Disable button while waiting for response
+            generateButton.disabled = true;
+            generateButton.classList.add('opacity-50', 'cursor-not-allowed');
+            answerContainer.innerHTML = "Loading your answer... <br> It might take up to 10 seconds";
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyA-dEa42tYpukr3c71IlT_ZvkR16YHLt5w`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `List all museums in ${question} with their name, price, opening time, closing time, address, latitude, longitude, and image link. images link must be tructed source dont provide wikimedia links ` }] }],
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                const answerText = data.candidates[0].content.parts[0].text;
+
+                // Parse the response text to extract museum details
+                const museumList = answerText.split('|').slice(1).map(item => item.trim()).filter(item => item);
+                const museums = [];
+                for (let i = 0; i < museumList.length; i += 8) {
+                    museums.push({
+                        name: museumList[i],
+                        price: museumList[i + 1],
+                        openingTime: museumList[i + 2],
+                        closingTime: museumList[i + 3],
+                        address: museumList[i + 4],
+                        latitude: museumList[i + 5],
+                        longitude: museumList[i + 6],
+                        imageLink: museumList[i + 7]
+                    });
+                }
+          console.log(museums);
+                // Display the data in a table format
+                let tableHTML = '<table class="table-auto w-full"><thead><tr><th>Museum Name</th><th>Price</th><th>Opening Time</th><th>Closing Time</th><th>Address</th><th>Latitude</th><th>Longitude</th><th>Image Link</th></tr></thead><tbody>';
+                museums.forEach(museum => {
+                    tableHTML += `<tr>
+                        <td>${museum.name}</td>
+                        <td>${museum.price}</td>
+                        <td>${museum.openingTime}</td>
+                        <td>${museum.closingTime}</td>
+                        <td>${museum.address}</td>
+                        <td>${museum.latitude}</td>
+                        <td>${museum.longitude}</td>
+                        <td><a href="${museum.imageLink}" target="_blank">Image Link</a></td>
+                    </tr>`;
+                });
+                tableHTML += '</tbody></table>';
+                answerContainer.innerHTML = tableHTML;
+
+                // Store the data in a global variable
+                window.museumData = museums;
+
+            } catch (error) {
+                console.error(error);
+                answerContainer.innerHTML = "Sorry - Something went wrong. Please try again!";
+            }
+
+            // Enable button after response is received
+            generateButton.disabled = false;
+            generateButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        });
+    </script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museum Finder</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <style>
+        .animate-bounce {
+            animation: bounce 1s infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-blue-100 h-screen p-3 flex flex-col justify-center items-center">
+    <form id="cityForm" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg shadow-lg bg-white py-6 px-4 transition-all duration-500 transform hover:scale-105">
+        <h1 class="text-4xl font-bold text-blue-500 mb-4 animate-bounce">Museum Finder</h1>
+        <input
+            id="city"
+            required
+            class="border border-gray-300 rounded w-full my-2 p-3 transition-all duration-300 focus:border-blue-400 focus:shadow-lg"
+            placeholder="Enter a city"
+        />
+        <button
+            type="submit"
+            id="searchButton"
+            class="bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-all duration-300"
+        >
+            Search Museums
+        </button>
+    </form>
+    
+    <div id="museumsContainer" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg bg-white my-4 shadow-lg transition-all duration-500 transform hover:scale-105">
+        <div id="museumsList" class="p-4"></div>
+    </div>
+
+    <div id="museumDetails" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg bg-white my-4 shadow-lg p-4 hidden">
+        <h2 id="museumName" class="text-xl font-bold text-blue-500"></h2>
+        <img id="museumImage" class="rounded-lg shadow-md mx-auto my-2">
+        <p id="museumDescription" class="text-gray-700 my-2"></p>
+        <p id="museumAddress" class="text-gray-700 my-2"></p>
+        <p id="museumOpeningHours" class="text-gray-500"></p>
+        <p id="museumTicketPrice" class="text-gray-600 italic"></p>
+    </div>
+
+    <script>
+        let museumsList = [];
+
+        document.getElementById('cityForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const city = document.getElementById('city').value;
+            const museumsContainer = document.getElementById('museumsList');
+            const searchButton = document.getElementById('searchButton');
+            const museumDetails = document.getElementById('museumDetails');
+
+            // Clear previous results
+            museumsContainer.innerHTML = '';
+            museumDetails.classList.add('hidden');
+
+            // Disable button while waiting for response
+            searchButton.disabled = true;
+            searchButton.classList.add('opacity-50', 'cursor-not-allowed');
+            museumsContainer.innerHTML = "Loading museums...";
+
+            try {
+                const openTripMapApiKey = '5ae2e3f221c38a28845f05b6a04d63d52bbaff23ce1750f6ee143cb8'; // Replace with your OpenTripMap API key
+                const geminiApiKey = 'AIzaSyA-dEa42tYpukr3c71IlT_ZvkR16YHLt5w'; // Replace with your Gemini API key
+
+                // Get city coordinates
+                const geoResponse = await fetch(`https://api.opentripmap.com/0.1/en/places/geoname?name=${city}&apikey=${openTripMapApiKey}`);
+                const geoData = await geoResponse.json();
+                const cityLat = geoData.lat;
+                const cityLon = geoData.lon;
+
+                // Fetch museums around the city coordinates
+                const radius = 10000; // 100 km radius
+                const kinds = 'museums';
+                const museumsResponse = await fetch(`https://api.opentripmap.com/0.1/en/places/radius?radius=${radius}&lon=${cityLon}&lat=${cityLat}&kinds=${kinds}&apikey=${openTripMapApiKey}`);
+                const museumsData = await museumsResponse.json();
+
+                // Clear loading message
+                museumsContainer.innerHTML = '';
+
+                if (museumsData.features && museumsData.features.length > 0) {
+                    museumsList = museumsData.features.map(museum => ({
+                        name: museum.properties.name,
+                        address: museum.properties.address || 'No address available',
+                        lat: museum.geometry.coordinates[1],
+                        lon: museum.geometry.coordinates[0]
+                    }));
+
+                    // Fetch additional details from Gemini API
+                   
+                    try {
+                         
+                        const museumNames = museumsList.map(museum => museum.name).join(', ');
+                    
+                        const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${geminiApiKey}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                contents: [{ parts: [{ text: `Provide details for the museums in ${city} including name, address, price, opening time, closing time, description, and a trusted image link. Include the following museums: ${museumNames}.  follow syntax ex = **name**:*jas goi*,**address**:*Railway yard, Ajni, Nagpur 440013*` }] }],
+                            }),
+                        });
+                    
+                         
+
+                            const geminiData = await geminiResponse.json();
+                            const geminiText = geminiData.candidates[0].content.parts[0].text;
+                            console.log(geminiText);
+
+                            // Parse the response text to extract museum details
+                            const details = geminiText.split('**').map(item => item.trim()).filter(item => item);
+                            museum.price = details[1] || 'Price not available';
+                            museum.openingTime = details[2] || 'Opening time not available';
+                            museum.closingTime = details[3] || 'Closing time not available';
+                            museum.description = details[4] || 'Description not available';
+                            museum.imageLink = details[5] || 'Image not available';
+                        } catch (geminiError) {
+                            console.error(`Error fetching details for ${museum.name}:`, geminiError);
+                        }
+                    
+                    // Display museum names
+                    museumsList.forEach((museum, index) => {
+                        const museumDiv = document.createElement('div');
+                        museumDiv.classList.add('cursor-pointer', 'text-xl', 'text-blue-500', 'my-2', 'hover:underline');
+                        museumDiv.textContent = museum.name;
+
+                        museumDiv.addEventListener('click', () => displayMuseumDetails(index));
+
+                        museumsContainer.appendChild(museumDiv);
+                    });
+                } else {
+                    museumsContainer.innerHTML = 'No museums found in this city.';
+                }
+            } catch (error) {
+                console.error(error);
+                museumsContainer.innerHTML = "Sorry - Something went wrong. Please try again!";
+            }
+
+            // Enable button after response is received
+            searchButton.disabled = false;
+            searchButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        });
+
+        function displayMuseumDetails(index) {
+            const museum = museumsList[index];
+            document.getElementById('museumName').textContent = museum.name;
+            document.getElementById('museumAddress').textContent = museum.address;
+            document.getElementById('museumOpeningHours').textContent = `Opening Hours: ${museum.openingTime} - ${museum.closingTime}`;
+            document.getElementById('museumTicketPrice').textContent = `Ticket Price: ${museum.price}`;
+            document.getElementById('museumDescription').textContent = museum.description;
+            
+            if (museum.imageLink) {
+                document.getElementById('museumImage').src = museum.imageLink;
+                document.getElementById('museumImage').classList.remove('hidden');
+            } else {
+                document.getElementById('museumImage').classList.add('hidden');
+            }
+
+            // Show museum details
+            document.getElementById('museumDetails').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html> 
+ -->
+
+
+
+
+
+ <!-- <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Museum Finder</title>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+     <style>
+         .animate-bounce {
+             animation: bounce 1s infinite;
+         }
+     </style>
+ </head>
+ <body class="bg-gradient-to-r from-blue-50 to-blue-100 h-screen p-3 flex flex-col justify-center items-center">
+     <form id="cityForm" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg shadow-lg bg-white py-6 px-4 transition-all duration-500 transform hover:scale-105">
+         <h1 class="text-4xl font-bold text-blue-500 mb-4 animate-bounce">Museum Finder</h1>
+         <input
+             id="city"
+             required
+             class="border border-gray-300 rounded w-full my-2 p-3 transition-all duration-300 focus:border-blue-400 focus:shadow-lg"
+             placeholder="Enter a city"
+         />
+         <button
+             type="submit"
+             id="searchButton"
+             class="bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-all duration-300"
+         >
+             Search Museums
+         </button>
+     </form>
+     
+     <div id="museumsContainer" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg bg-white my-4 shadow-lg transition-all duration-500 transform hover:scale-105">
+         <div id="museumsList" class="p-4"></div>
+     </div>
+ 
+     <div id="museumDetails" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg bg-white my-4 shadow-lg p-4 hidden">
+         <h2 id="museumName" class="text-xl font-bold text-blue-500"></h2>
+         <img id="museumImage" class="rounded-lg shadow-md mx-auto my-2">
+         <p id="museumDescription" class="text-gray-700 my-2"></p>
+         <p id="museumAddress" class="text-gray-700 my-2"></p>
+         <p id="museumOpeningHours" class="text-gray-500"></p>
+         <p id="museumTicketPrice" class="text-gray-600 italic"></p>
+     </div>
+ 
+     <script>
+         let museumsList = [];
+ 
+         document.getElementById('cityForm').addEventListener('submit', async function(e) {
+             e.preventDefault();
+             const city = document.getElementById('city').value;
+             const museumsContainer = document.getElementById('museumsList');
+             const searchButton = document.getElementById('searchButton');
+             const museumDetails = document.getElementById('museumDetails');
+ 
+             // Clear previous results
+             museumsContainer.innerHTML = '';
+             museumDetails.classList.add('hidden');
+ 
+             // Disable button while waiting for response
+             searchButton.disabled = true;
+             searchButton.classList.add('opacity-50', 'cursor-not-allowed');
+             museumsContainer.innerHTML = "Loading museums...";
+ 
+             try {
+                 const openTripMapApiKey = '5ae2e3f221c38a28845f05b6a04d63d52bbaff23ce1750f6ee143cb8'; // Replace with your OpenTripMap API key
+                 const geminiApiKey = 'AIzaSyA-dEa42tYpukr3c71IlT_ZvkR16YHLt5w'; // Replace with your Gemini API key
+ 
+                 // Get city coordinates
+                 const geoResponse = await fetch(`https://api.opentripmap.com/0.1/en/places/geoname?name=${city}&apikey=${openTripMapApiKey}`);
+                 const geoData = await geoResponse.json();
+                 const cityLat = geoData.lat;
+                 const cityLon = geoData.lon;
+ 
+                 // Fetch museums around the city coordinates
+                 const radius = 20000; // 20 km radius
+                 const kinds = 'museums';
+                 const museumsResponse = await fetch(`https://api.opentripmap.com/0.1/en/places/radius?radius=${radius}&lon=${cityLon}&lat=${cityLat}&kinds=${kinds}&apikey=${openTripMapApiKey}`);
+                 const museumsData = await museumsResponse.json();
+ 
+                 // Clear loading message
+                 museumsContainer.innerHTML = '';
+ 
+                 if (museumsData.features && museumsData.features.length > 0) {
+                     museumsList = museumsData.features.map(museum => ({
+                         name: museum.properties.name,
+                         lat: museum.geometry.coordinates[1],
+                         lon: museum.geometry.coordinates[0],
+                         image: museum.properties.image
+                     }));
+ 
+                     // Construct the list of museum names
+                     const museumNames = museumsList.map(museum => museum.name).join(', ');
+ 
+                     // Fetch additional details from Gemini API
+                     try {
+                        const museumNames = museumsList.map(museum => museum.name).join(', ');
+                    
+                         const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${geminiApiKey}`, {
+                             method: 'POST',
+                             headers: {
+                                 'Content-Type': 'application/json',
+                             },
+                             body: JSON.stringify({
+                                contents: [{ parts: [{ text: `Give detailed information about museums in ${city}, such as name, address, opening and closing hours, ticket price, description, and a trusted image link. must include ${museumNames} Strictly follow this format for each museum: **Name:**, **Address:**, **Price:**, **Opening Time:**, **Closing Time:**, **Description:**, **Image Link:**. wikimedia.org is under maintainence so dont use it` }] }]
+                            }),
+                         });
+ 
+                         const geminiData = await geminiResponse.json();
+                         const geminiText = geminiData.candidates[0].content.parts[0].text;
+                         console.log(geminiText);
+ 
+                         // Parse the response text to extract museum details
+                         const detailsArray = geminiText.split('**Name:**').slice(1).map(item => {
+                            const details = item.split('\n').map(line => line.trim());
+                            return {
+                                name: details[0] || 'Name not available',
+                                address: details.find(detail => detail.startsWith('**Address:**'))?.split(':')[1]?.trim() || 'Address not available',
+                                price: details.find(detail => detail.startsWith('**Price:**'))?.split(':')[1]?.trim() || 'Price not available',
+                                openingTime: details.find(detail => detail.startsWith('**Opening Time:**'))?.split(':')[1]?.trim() || 'Opening time not available',
+                                closingTime: details.find(detail => detail.startsWith('**Closing Time:**'))?.split(':')[1]?.trim() || 'Closing time not available',
+                                description: details.find(detail => detail.startsWith('**Description:**'))?.split(':')[1]?.trim() || 'Description not available',
+                                imageLink: details.find(detail => detail.startsWith('**Image Link:**'))?.split(':')[1]?.trim() || 'Image not available',
+                            };
+                        });
+                        
+                         console.log("list of museums ", museumsList);
+ 
+                         // Display museum names
+                         museumsList.forEach((museum, index) => {
+                             const museumDiv = document.createElement('div');
+                             museumDiv.classList.add('cursor-pointer', 'text-xl', 'text-blue-500', 'my-2', 'hover:underline');
+                             museumDiv.textContent = museum.name;
+ 
+                             museumDiv.addEventListener('click', () => displayMuseumDetails(index));
+ 
+                             museumsContainer.appendChild(museumDiv);
+                         });
+                     } catch (geminiError) {
+                         console.error(`Error fetching details for museums in ${city}:`, geminiError);
+                     }
+                 } else {
+                     museumsContainer.innerHTML = 'No museums found in this city.';
+                 }
+             } catch (error) {
+                 console.error(error);
+                 museumsContainer.innerHTML = "Sorry - Something went wrong. Please try again!";
+             }
+ 
+             // Enable button after response is received
+             searchButton.disabled = false;
+             searchButton.classList.remove('opacity-50', 'cursor-not-allowed');
+         });
+ 
+         function displayMuseumDetails(index) {
+             const museum = museumsList[index];
+             document.getElementById('museumName').textContent = museum.name;
+             document.getElementById('museumAddress').textContent = museum.address;
+             document.getElementById('museumOpeningHours').textContent = `Opening Hours: ${museum.openingTime} - ${museum.closingTime}`;
+             document.getElementById('museumTicketPrice').textContent = `Ticket Price: ${museum.price}`;
+             document.getElementById('museumDescription').textContent = museum.description;
+             
+             if (museum.imageLink) {
+                 document.getElementById('museumImage').src = museum.imageLink;
+                 document.getElementById('museumImage').classList.remove('hidden');
+             } else {
+                 document.getElementById('museumImage').classList.add('hidden');
+             }
+ 
+             // Show museum details
+             document.getElementById('museumDetails').classList.remove('hidden');
+         }
+     </script>
+ </body>
+ </html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <!-- <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Museum Finder</title>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+     <style>
+         .animate-bounce {
+             animation: bounce 1s infinite;
+         }
+     </style>
+ </head>
+ <body class="bg-gradient-to-r from-blue-50 to-blue-100 h-screen p-3 flex flex-col justify-center items-center">
+     <form id="cityForm" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg shadow-lg bg-white py-6 px-4 transition-all duration-500 transform hover:scale-105">
+         <h1 class="text-4xl font-bold text-blue-500 mb-4 animate-bounce">Museum Finder</h1>
+         <input
+             id="city"
+             required
+             class="border border-gray-300 rounded w-full my-2 p-3 transition-all duration-300 focus:border-blue-400 focus:shadow-lg"
+             placeholder="Enter a city"
+         />
+         <button
+             type="submit"
+             id="searchButton"
+             class="bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-all duration-300"
+         >
+             Search Museums
+         </button>
+     </form>
+     
+     <div id="museumsContainer" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg bg-white my-4 shadow-lg transition-all duration-500 transform hover:scale-105">
+         <div id="museumsList" class="p-4"></div>
+     </div>
+ 
+     <div id="museumDetails" class="w-full md:w-2/3 lg:w-1/2 xl:w-1/3 text-center rounded-lg bg-white my-4 shadow-lg p-4 hidden">
+         <h2 id="museumName" class="text-xl font-bold text-blue-500"></h2>
+         <img id="museumImage" class="rounded-lg shadow-md mx-auto my-2">
+         <p id="museumDescription" class="text-gray-700 my-2"></p>
+         <p id="museumAddress" class="text-gray-700 my-2"></p>
+         <p id="museumOpeningHours" class="text-gray-500"></p>
+         <p id="museumTicketPrice" class="text-gray-600 italic"></p>
+     </div>
+ 
+     <script>
+         let museumsList = [];
+ 
+         document.getElementById('cityForm').addEventListener('submit', async function(e) {
+             e.preventDefault();
+             const city = document.getElementById('city').value;
+             const museumsContainer = document.getElementById('museumsList');
+             const searchButton = document.getElementById('searchButton');
+             const museumDetails = document.getElementById('museumDetails');
+ 
+             // Clear previous results
+             museumsContainer.innerHTML = '';
+             museumDetails.classList.add('hidden');
+ 
+             // Disable button while waiting for response
+             searchButton.disabled = true;
+             searchButton.classList.add('opacity-50', 'cursor-not-allowed');
+             museumsContainer.innerHTML = "Loading museums...";
+ 
+             try {
+                 const openTripMapApiKey = '5ae2e3f221c38a28845f05b6a04d63d52bbaff23ce1750f6ee143cb8'; // Replace with your OpenTripMap API key
+                 const geminiApiKey = 'AIzaSyA-dEa42tYpukr3c71IlT_ZvkR16YHLt5w'; // Replace with your Gemini API key
+ 
+                 // Get city coordinates
+                 const geoResponse = await fetch(`https://api.opentripmap.com/0.1/en/places/geoname?name=${city}&apikey=${openTripMapApiKey}`);
+                 const geoData = await geoResponse.json();
+                 const cityLat = geoData.lat;
+                 const cityLon = geoData.lon;
+ 
+                 // Fetch museums around the city coordinates
+                 const radius = 20000; // 20 km radius
+                 const kinds = 'museums';
+                 const museumsResponse = await fetch(`https://api.opentripmap.com/0.1/en/places/radius?radius=${radius}&lon=${cityLon}&lat=${cityLat}&kinds=${kinds}&apikey=${openTripMapApiKey}`);
+                 const museumsData = await museumsResponse.json();
+                 console.log(museumsData)
+                 // Clear loading message
+                 museumsContainer.innerHTML = '';
+ 
+                 if (museumsData.features && museumsData.features.length > 0) {
+                     museumsList = museumsData.features.map(museum => ({
+                         name: museum.properties.name,
+                         lat: museum.geometry.coordinates[1],
+                         lon: museum.geometry.coordinates[0],
+                     }));
+ 
+   
+                     // Fetch additional details from Gemini API
+                     try {
+                        const museumNames = museumsList.map(museum => museum.name).join(', ');
+                    
+                         const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${geminiApiKey}`, {
+                             method: 'POST',
+                             headers: {
+                                 'Content-Type': 'application/json',
+                             },
+                             body: JSON.stringify({
+                                contents: [{ parts: [{ text: `Give detailed information about museums in ${city}, such as name, address, opening and closing hours, ticket price, description, and a trusted image link. must include ${museumNames} Strictly follow this format for each museum: **Name:**, **Address:**, **Price:**, **Opening Time:**, **Closing Time:**, **Description:**, **Image Link:**. wikimedia.org is under maintainence so dont use it` }] }]
+                            }),
+                         });
+ 
+                         const geminiData = await geminiResponse.json();
+                         const geminiText = geminiData.candidates[0].content.parts[0].text;
+                         console.log(geminiText);
+ 
+                         // Parse the response text to extract museum details
+                         const detailsArray = geminiText.split('**Name:**').slice(1).map(item => {
+                            const details = item.split('\n').map(line => line.trim());
+                            return {
+                                name: details[0] || 'Name not available',
+                                address: details.find(detail => detail.startsWith('**Address:**'))?.split(':')[1]?.trim() || 'Address not available',
+                                price: details.find(detail => detail.startsWith('**Price:**'))?.split(':')[1]?.trim() || 'Price not available',
+                                openingTime: details.find(detail => detail.startsWith('**Opening Time:**'))?.split(':')[1]?.trim() || 'Opening time not available',
+                                closingTime: details.find(detail => detail.startsWith('**Closing Time:**'))?.split(':')[1]?.trim() || 'Closing time not available',
+                                description: details.find(detail => detail.startsWith('**Description:**'))?.split(':')[1]?.trim() || 'Description not available',
+                                imageLink: details.find(detail => detail.startsWith('**Image Link:**'))?.split(':')[1]?.trim() || 'Image not available',
+                            };
+                        });
+                        
+                         console.log("list of museums ", detailsArray);
+ 
+                         // Display museum names
+                         museumsList.forEach((museum, index) => {
+                             const museumDiv = document.createElement('div');
+                             museumDiv.classList.add('cursor-pointer', 'text-xl', 'text-blue-500', 'my-2', 'hover:underline');
+                             museumDiv.textContent = museum.name;
+ 
+                             museumDiv.addEventListener('click', () => displayMuseumDetails(index));
+ 
+                             museumsContainer.appendChild(museumDiv);
+                         });
+                     } catch (geminiError) {
+                         console.error(`Error fetching details for museums in ${city}:`, geminiError);
+                     }
+                 } else {
+                     museumsContainer.innerHTML = 'No museums found in this city.';
+                 }
+             } catch (error) {
+                 console.error(error);
+                 museumsContainer.innerHTML = "Sorry - Something went wrong. Please try again!";
+             }
+ 
+             // Enable button after response is received
+             searchButton.disabled = false;
+             searchButton.classList.remove('opacity-50', 'cursor-not-allowed');
+         });
+ 
+         function displayMuseumDetails(index) {
+             const museum = museumsList[index];
+             document.getElementById('museumName').textContent = museum.name;
+             document.getElementById('museumAddress').textContent = museum.address;
+             document.getElementById('museumOpeningHours').textContent = `Opening Hours: ${museum.openingTime} - ${museum.closingTime}`;
+             document.getElementById('museumTicketPrice').textContent = `Ticket Price: ${museum.price}`;
+             document.getElementById('museumDescription').textContent = museum.description;
+             
+             if (museum.imageLink) {
+                 document.getElementById('museumImage').src = museum.imageLink;
+                 document.getElementById('museumImage').classList.remove('hidden');
+             } else {
+                 document.getElementById('museumImage').classList.add('hidden');
+             }
+ 
+             // Show museum details
+             document.getElementById('museumDetails').classList.remove('hidden');
+         }
+     </script>
+ </body>
+ </html> -->

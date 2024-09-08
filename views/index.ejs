@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Template</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+
+</head>
+<body>
+    <div class="ticket">
+        <div class="ticket-left">
+            <div class="header">
+                <div class="yellow-box"></div>
+                <h1>MUSEUM TICKET</h1>
+            </div>
+            <div class="ticket-info">
+                <p>NAME OF VISITOR:</p>
+                <p class="dashed">-------------------------</p>
+                <p>TICKET ID:</p>
+                <p class="dashed">-------------------------</p>
+                <p>DATE:</p>
+                <p class="dashed">__/__/__</p>
+                <div class="time">
+                    <p>TIME:</p>
+                    <div class="time-box">
+                        <span>__</span>
+                        <span>TO</span>
+                        <span>__</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="ticket-right">
+            <h1>MUSEUM TICKET</h1>
+            <div class="ticket-info">
+                <p>NAME OF VISITOR:</p>
+                <p class="dashed">-------------------------</p>
+                <p>TICKET ID:</p>
+                <p class="dashed">-------------------------</p>
+                <div class="time">
+                    <p>TIME:</p>
+                    <div class="time-box">
+                        <span>__</span>
+                        <span>TO</span>
+                        <span>__</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="download-btn">Download as PDF</button>
+
+    <script>
+        document.getElementById('download-btn').addEventListener('click', function () {
+            const ticketElement = document.querySelector('.ticket');
+            
+            html2canvas(ticketElement, {
+                scale: 2,
+                useCORS: true
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF({
+                    orientation: 'landscape',
+                    unit: 'px',
+                    format: [canvas.width, canvas.height]
+                });
+
+                pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+                pdf.save('museum_ticket.pdf');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+*{
+  margin: 0;
+  padding: 0;
+background-color: rgb(255, 255, 255);
+}
+@import url('https://fonts.googleapis.com/css2?family=Nerko+One&display=swap');
+
+#container{
+ 
+  width: 100vw;
+  height: 100vh;
+  background-image: linear-gradient(to bottom, #6d1ffd, #87bff4);
+  /* background-color: #841c1c; */
+  display: flex;
+  /* justify-content: center; */
+  margin: 0 auto;
+  /* position: relative; */
+  flex-direction: column;
+}
+
+.bot{
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  min-width: 350px;
+  max-width: 400px;
+  height: 90vh;
+  background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);
+  /* background-color: #841c1c; */
+  display: flex;
+  /* justify-content: center; */
+  margin: 0 auto;
+  /* position: relative; */
+  flex-direction: column;
+}
+
+header{
+ border-radius: 10px;
+  width: 95%;
+  height: 10%;
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  color: white;
+  /* font-size: 30px; */
+  padding: 10px;
+  background-color: #a6c1ee;
+  display: flex;
+  
+}
+  
+.content{
+ 
+background-color: transparent;
+/* color: black; */
+display: flex;
+flex-direction: column;
+text-align: center;
+width: 90%;
+}
+
+.content .name{
+  background-color: transparent;
+  color: black;
+  font-size: 1.5rem;
+  font-family: 'GT America', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  
+  font-weight: 900;
+  font-style: normal;
+ 
+}
+
+.content .decreption{
+   color: black;
+   background-color: transparent;
+  font-size: 1rem;
+  font-family: 'GT America', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 500;
+  font-style: normal;
+  margin-left: 5px;
+}
+
+.close i{
+  color: #221818;
+  font-size: 1.5rem;
+  background-color: transparent;
+  
+}
+
+
+
+
+
+
+/* Chat box css */
+main{
+  height: 90%;
+  background-color: transparent;
+  overflow-y: scroll;
+  
+}
+
+.message-box {
+  background-color: transparent;
+  width: fit-content;
+  max-width: 90%;
+  padding: 5px 10px;
+  /* margin-bottom: 5px; */
+  border-radius: 10px;
+}
+.message-box.left {
+  background-color: transparent;
+  color: #221818;
+  font-size: 13px;
+  right: 0;
+}
+.message-box.left p{
+  background-color: rgba(255, 255, 255,0.4) ;
+  padding: 10px;
+  font-family: 600;
+  font-size: 1rem;
+  border-radius: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Question button css */
+
+.Questions{
+  background-color: transparent;
+  margin-top: 8px;
+}
+
+.message-box.left.Question{
+  padding: 2px 19px;
+  cursor: pointer;
+
+  color: #221818;
+  font-size: 13px;
+  /* right: 0; */
+}
+
+.message-box.left.Question p{
+  padding: 17px 18px;
+  border-radius: 30px;
+  background-color: rgb(228 162 247 / 40%);
+  border: 2px #5c9900 solid;
+}
+
+
+
+
+
+
+/* Message at left side */
+.opponentResponse{
+  background-color: transparent;
+
+}
+.rightSideResponse{
+  width: 98%;
+  background-color: transparent;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}
+.message-box.right {
+  background-color: transparent;
+  color: #221818;
+  font-size: 13px;
+  right: 0;
+}
+.message-box.right p{
+  padding: 14px;
+  font-family: 600;
+  background-color: rgba(214 246 251 / 60%);
+  font-size: 1.1rem;
+  border-radius: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Bot footer */
+.footer{
+  
+  visibility: hidden;
+  background-color: transparent;
+  /* width: 100%; */
+  height: 10%;
+  min-height: 48px;
+  max-height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 30px;
+  /* padding: 10px; */
+  background-color: #a6c1ee;
+  display: flex;
+}
+
+.chat-input {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  /* padding: 10px; */
+  border-top: 1px solid #ccc;
+}
+
+.message-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 5px;
+  font-size: 24px;
+}
+
+.send-button {
+  border: none;
+  outline: none;
+  background-color: #333;
+  color: #fff;
+  font-size: 14px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.send-button:hover {
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
+}
