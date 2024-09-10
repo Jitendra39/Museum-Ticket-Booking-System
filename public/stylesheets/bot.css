@@ -21,9 +21,10 @@ background-color: rgb(255, 255, 255);
 .bot{
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  min-width: 350px;
-  max-width: 400px;
+  min-width: 400px;
+  max-width: 405px;
   height: 90vh;
+  max-height: 700px;
   background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);
   /* background-color: #841c1c; */
   display: flex;
@@ -233,6 +234,7 @@ main{
   border: none;
   outline: none;
   padding: 5px;
+  color: #221818;
   font-size: 24px;
 }
 
@@ -250,4 +252,92 @@ main{
   background-color: rgb(255, 255, 255);
   color: rgb(0, 0, 0);
   box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* museum details card */
+.titleDropBox{
+  background-color: transparent;
+  display: none;
+}
+
+.museumDetails{
+  border-radius: 4px;
+  background-color:white;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  margin: 10px auto 0 auto;
+  padding: 4px 4px 4px 14px;
+  
+}
+
+.museumDetails .titleBtn{
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+  font-family: poppins;
+}
+
+.museumDetails .titleBtn .title{
+  width: 91%;
+  align-items: flex-start;
+}
+
+
+.museumDetails .titleBtn .btn{
+  width: 5%;
+  background-color: transparent;
+  color: #221818;
+  /* font-size: 1.5rem; */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+}
+
+
+
+
+.dropBox {
+  display: none;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: max-height 0.3s ease-out;
+  overflow: hidden;
+}
+
+.dropBoxContent {
+  padding: 8px;
+}
+
+.content {
+  margin-bottom: 4px;
+}
+
+.contentTitle {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.contentText {
+  color: #555;
+}
+
+.titleBtn {
+  cursor: pointer;
 }
