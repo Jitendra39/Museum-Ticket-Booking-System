@@ -14,12 +14,13 @@ router.post('/museumInfo', (req, res)=>{
 
 
 router.get('/test', async (req, res) => {
+
   const options = {
     method: 'GET',
     url: 'https://google-map-places.p.rapidapi.com/maps/api/place/nearbysearch/json',
     params: {
-      location: '21.1458,79.0882', // Coordinates for Nagpur
-      radius: '5000', // 5 km radius
+      location: '18.5171968, 73.8623488', // Coordinates for Nagpur
+      radius: '160000', // 5 km radius
       type: 'museum',
       language: 'en'
     },
@@ -31,6 +32,8 @@ router.get('/test', async (req, res) => {
 
   try {
     const response = await axios.request(options);
+    console.log(response.data);
+    
     const museums = response.data.results.map((museum) => ({
       name: museum.name,
       address: museum.vicinity,

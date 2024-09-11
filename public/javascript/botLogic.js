@@ -1,10 +1,13 @@
+ 
+
 let ExistingQeustionsAndResponses = [];
 let temperaryQuestions = [];
 let QuestionsClicked = "";
 let listOfMuseums = [];
 let typeOfQuestion = "";
 let cityName = "";
-let museumDetails = {};
+let museumData = {};
+let backendLink = "http://localhost:8000";
 
 window.addEventListener("DOMContentLoaded", () => {
   const titleBtn = document.querySelector(".titleBtn");
@@ -71,105 +74,176 @@ const displayMuseumList = (ques, Questions) => {
       museumDetails.appendChild(titleBtn);
       titleBtn.addEventListener("click", () => {
         if (dropBox.style.display === "none" || dropBox.style.display === "") {
-          
-          getMuseamDetails(museum,dropBox,titleBtn,museumDetails);
-         
+          getMuseamDetails(museum, dropBox, titleBtn, museumDetails);
         } else {
           dropBox.style.display = "none";
         }
       });
 
-      // const museumContent = museumDetails[museum];
-      // museumContent?.forEach((content) => {
-      // //   let dropBox = document.createElement("div");
-     
-      // // dropBox.classList.add("dropBox");
-      // dropBox.innerHTML = `
-      //           <div class="dropBoxContent">
-      //               <div class="content">
-      //                   <div class="contentTitle">Address</div>
-      //                   <div class="contentText">${content.address}</div>
-      //               </div>
-      //               <div class="content">
-      //                   <div class="contentTitle">Phone</div>
-      //                   <div class="contentText">${content.contactNumber}</div>
-      //               </div>
-      //               <div class="content">
-      //                   <div class="contentTitle">Open</div>
-      //                   <div class="contentText">${content.openingTime} AM - ${content.closingTime} PM</div>
-      //               </div>
-      //               <div class="content">
-      //                   <div class="contentTitle">Entry Fee</div>
-      //                   <div class="contentText">${content.price}</div>
-      //               </div>
-      //           </div>
-      //       `;
-
-      // // btn click
-
-      // museumDetails.appendChild(titleBtn);
-      // museumDetails.appendChild(dropBox);
-      // });
       document.querySelector(".titleDropBox").appendChild(museumDetails);
     });
   }
 };
 
-async function getMuseamDetails(museum,dropBox,titleBtn,museumDetails) {
-  fetch("http://localhost:8000/api/museumInfo", {
-    method: "POST",
+async function getMuseamDetails(museum, dropBox, titleBtn, museumDetails) {
+  let museumContent = "";
+  if (museumDetails[museum]) {
+    museumContent = museumDetails[museum];
+    displayMuseumContent(dropBox, titleBtn, museumDetails, museumContent);
+  } else {
+    fetch(`${backendLink}/api/museumInfo`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ city: cityName, museums: museum }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (!museumDetails[museum]) {
+          museumDetails[museum] = [];
+        }
+        museumDetails[museum].push(...data.geminiInfo);
+        console.log(museumDetails);
+        const museumContent = museumDetails[museum];
+        displayMuseumContent(dropBox, titleBtn, museumDetails, museumContent);
+      });
+  }
+}
+
+const displayMuseumContent = (
+  dropBox,
+  titleBtn,
+  museumDetails,
+  museumContent
+) => {
+  museumContent?.forEach((content) => {
+    dropBox.innerHTML = `
+      <div class="dropBoxContent">
+        <div class="content">
+          <div class="contentTitle">Address</div>
+          <div class="contentText">${content.address}</div>
+        </div>
+        <div class="content">
+          <div class="contentTitle">Phone</div>
+          <div class="contentText">${content.contactNumber}</div>
+        </div>
+        <div class="content">
+          <div class="contentTitle">Open</div>
+          <div class="contentText">${content.openingTime} AM - ${content.closingTime} PM</div>
+        </div>
+        <div class="content">
+          <div class="contentTitle">Entry Fee</div>
+          <div class="contentText">${content.price}</div>
+        </div>
+        <div class="content">
+  <button class="button type1" onclick="handleBookTicketClick(${JSON.stringify(content).replace(/"/g, '&quot;')})">
+            Book Ticket
+          </button>
+        </div>
+      </div>
+    `;
+
+    // Append the title button and dropBox to museumDetails
+    museumDetails.appendChild(titleBtn);
+    museumDetails.appendChild(dropBox);
+  });
+
+  // Append museumDetails to the titleDropBox container
+  document.querySelector(".titleDropBox").appendChild(museumDetails);
+
+  // Make the dropBox visible
+  dropBox.style.display = "block";
+};
+
+
+
+
+
+const handleBookTicketClick = async (content) => {
+  console.log(content);
+  console.log(content.name);
+  let Members = [];
+  let totalMembersCount = 0;
+
+  // Hide the museum details
+  document.querySelector(".titleDropBox").style.display = "none";
+
+  // Handle the question click
+  typeOfQuestion = 'booking';
+  handleQuestionClick(content.name);
+  displayLocation('Enter Your name');
+  const userName = await takeUserInput();
+  handleQuestionClick(userName);
+  displayLocation('Enter Date');
+  const date = await takeUserInput('date');
+  handleQuestionClick(date);
+  displayLocation('Enter Member Count');
+  totalMembersCount = await takeUserInput('number');
+ 
+  handleQuestionClick(`${totalMembersCount} Members`);
+
+  for (let i = 0; i < totalMembersCount; i++) {
+    displayLocation(`Enter name for Member ${i + 1}`);
+    let memberName = await takeUserInput();
+    // Members.push(`Member ${i + 1}: ${memberName}`);
+    Members.push({name : memberName});
+    handleQuestionClick(memberName);
+   
+  }
+
+  displayLocation('Enter Your Email');
+  const userEmail = await takeUserInput();
+  console.log('user info', userName, userEmail, totalMembersCount, Members);
+
+  // Send a POST request to the backend to book a ticket
+  const queryParams = new URLSearchParams({
+    content,
+    city: cityName,
+    name: userName,
+    email: userEmail,
+    openingTime: content.openingTime,
+    closingTime: content.closingTime,
+    price: content.price,
+    addreess: content.address,
+    members: Members.join(','), // Convert array to comma-separated string
+    date,
+  }).toString();
+  
+  // Construct the URL with the query parameters
+  const url = `${backendLink}/ticket?${queryParams}`;
+  
+  // Send a GET request with the constructed URL
+  fetch(url, {
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ city: cityName, museums: museum }),
   })
-    .then((response) => response.json())
-
-    .then((data) => {
-      museumDetails[museum] = data.geminiInfo;
-      console.log(museumDetails);
-      const museumContent = museumDetails[museum];
-      museumContent?.forEach((content) => {
-      //   let dropBox = document.createElement("div");
-     
-      // dropBox.classList.add("dropBox");
-      dropBox.innerHTML = `
-                <div class="dropBoxContent">
-                    <div class="content">
-                        <div class="contentTitle">Address</div>
-                        <div class="contentText">${content.address}</div>
-                    </div>
-                    <div class="content">
-                        <div class="contentTitle">Phone</div>
-                        <div class="contentText">${content.contactNumber}</div>
-                    </div>
-                    <div class="content">
-                        <div class="contentTitle">Open</div>
-                        <div class="contentText">${content.openingTime} AM - ${content.closingTime} PM</div>
-                    </div>
-                    <div class="content">
-                        <div class="contentTitle">Entry Fee</div>
-                        <div class="contentText">${content.price}</div>
-                    </div>
-                </div>
-            `;
-
-      // btn click
-
-      museumDetails.appendChild(titleBtn);
-      museumDetails.appendChild(dropBox);
-      });
-      document.querySelector(".titleDropBox").appendChild(museumDetails);
-      dropBox.style.display = "block";
-    });
-}
+  .then(response => response.text()) // Expect HTML response
+  .then(html => {
+    // Handle the HTML response
+    document.open();
+    document.write(html);
+    document.close();
+  })
+  .catch(error => {
+    console.error("Error:", error);
+  });
+};
 
 function handleQuestionClick(questionBox, Questions) {
+  let questionText;
   const opponentResponse = document.querySelector(".opponentResponse");
-  const questionText = questionBox.querySelector("p").textContent;
-  console.log(questionText);
-
+if(typeOfQuestion === 'booking'){
+   questionText = questionBox;
+}else{
+ questionText = questionBox.querySelector("p").textContent;
   Questions.innerHTML = "";
+}
+ 
+  
   const rightsidebox = document.createElement("div");
   rightsidebox.classList.add("rightSideResponse");
   const clickedQuestionBox = document.createElement("div");
@@ -182,7 +256,7 @@ function handleQuestionClick(questionBox, Questions) {
   handleQuestionChange();
 }
 
-function handleQuestionChange() {
+async function handleQuestionChange() {
   // if(typeOfQuestion === 'museums'){
   //   fetchMuseumDetails(QuestionsClicked);
   // } else
@@ -199,23 +273,39 @@ function handleQuestionChange() {
         getMuseumNames(location.city);
       })
       .catch((error) => console.error("Error:", error));
-  } else if (QuestionsClicked === "Enter Location") {
-    const footer = document.querySelector(".footer");
-    const messageInput = document.querySelector(".message-input");
-    footer.style.visibility = "visible";
-    messageInput.addEventListener("keypress", function (e) {
-      if (e.key === "Enter") {
-        const location = messageInput.value;
-        console.log(location);
-        displayLocation(location);
-        cityName = location;
-        getMuseumNames(location);
-        messageInput.value = "";
-        footer.style.visibility = "hidden";
-      }
-    });
+  } else if (QuestionsClicked === "Enter Location" ) {
+    const location = await await takeUserInput();
+    console.log(location);
+    displayLocation(location);
+    cityName = location;
+    getMuseumNames(location);
+  
+
   }
 }
+
+function takeUserInput(type) {
+  const footer = document.querySelector(".footer");
+  const messageInput = document.querySelector(".message-input");
+  footer.style.visibility = "visible";
+  messageInput.type = type === 'date' ? 'date' : 'text';
+  return new Promise((resolve) => {
+    messageInput.addEventListener("keypress", function handler(e) {
+      if (e.key === "Enter") {
+        const input = messageInput.value;
+        footer.style.visibility = "hidden";
+        messageInput.value = "";
+        messageInput.removeEventListener("keypress", handler); // Remove the event listener after resolving
+        if (type === 'number') {
+          resolve(Number(input)); // Convert input to number if type is 'number'
+        } else {
+          resolve(input);
+        }
+      }
+    });
+  });
+}
+
 
 function BookTicket() {
   const footer = document.querySelector(".footer");
@@ -232,7 +322,8 @@ async function getMuseumNames(city) {
     const data = await response.json();
     console.log(data);
     listOfMuseums = data.museums
-      .filter((museum) => museum.name.trim() !== "")
+      .filter((museum) => museum.name.trim() !== "" 
+      && museum.name.trim() !== "MUSEUM" && museum.name.trim() !== "Museum" && !museum.name.trim().includes("Zoo") && !museum.name.trim().includes("zoo") && !museum.name.trim().includes("ZOO"))
       .map((museum) => museum.name);
     typeOfQuestion = "museums";
     initializeQuestions();
@@ -289,7 +380,11 @@ function displayLocation(location) {
   const opponentResponse = document.querySelector(".opponentResponse");
   const locationInfo = document.createElement("div");
   locationInfo.classList.add("message-box", "left");
-  if (location.city) {
+  if(typeOfQuestion === 'booking'){
+    locationInfo.innerHTML = `<p>${location} </p>`;
+    opponentResponse.appendChild(locationInfo);
+  }else
+    if (location.city) {
     locationInfo.innerHTML = `<p>City: ${location.city}, State: ${location.state}, State District: ${location.state_district}</p>`;
     opponentResponse.appendChild(locationInfo);
   } else {

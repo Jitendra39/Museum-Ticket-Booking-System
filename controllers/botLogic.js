@@ -29,20 +29,19 @@ const getMuseumNameImage = async (req, res) => {
  
 
 async function getCityCoordinates(city) {
-<<<<<<< HEAD
   const openTripMapApiKey = '5ae2e3f221c38a28845f05b6a04d63d52bbaff23ce1750f6ee143cb8';// Replace with your OpenTripMap API key
   const geoResponse = await fetch(
     `https://api.opentripmap.com/0.1/en/places/geoname?name=${city}&apikey=${openTripMapApiKey}`
   );
   const geoData = await geoResponse.json();
-  console.log("City coordinates:", geoData.population);
+  console.log("City coordinates:", geoData);
   return { lat: geoData.lat, lon: geoData.lon, population: geoData.population };
 }
 
 async function fetchMuseums(lat, lon, population) {
   console.log(population);
   const openTripMapApiKey = '5ae2e3f221c38a28845f05b6a04d63d52bbaff23ce1750f6ee143cb8'; // Replace with your OpenTripMap API key
-  const radius = (population ? Math.min(100000, population * 0.1) : 20000); // 20 km radius or 10% of population, whichever is smaller
+  const radius = (typeof population === 'number' && population > 0) ? Math.min(50000, Math.max(10000, population * 0.05)) : 50000; // 50 km radius or 5% of population, whichever is smaller, with a minimum of 10 km
   console.log("Fetching museums with radius", radius / 1000, "km", radius);
   const kinds = "museums";
   const museumsResponse = await axios.get(
@@ -70,40 +69,6 @@ async function searchImages(query) {
         Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`,
       },
     });
-=======
-    const openTripMapApiKey = ''; // Replace with your OpenTripMap API key
-    const geoResponse = await fetch(`https://api.opentripmap.com/0.1/en/places/geoname?name=${city}&apikey=${openTripMapApiKey}`);
-    const geoData = await geoResponse.json();
-    return { lat: geoData.lat, lon: geoData.lon };
-}
-
-async function fetchMuseums(lat, lon) {
-    const openTripMapApiKey = ''; // Replace with your OpenTripMap API key
-    const radius = 20000; // 20 km radius
-    const kinds = 'museums';
-    const museumsResponse = await fetch(`https://api.opentripmap.com/0.1/en/places/radius?radius=${radius}&lon=${lon}&lat=${lat}&kinds=${kinds}&apikey=${openTripMapApiKey}`);
-    const museumsData = await museumsResponse.json();
-    return museumsData.features.map(museum => ({
-        name: museum.properties.name,
-        lat: museum.geometry.coordinates[1],
-        lon: museum.geometry.coordinates[0],
-    }));
-}
-
-async function searchImages(query) {
-    console.log('Searching for images of', query);
-    const UNSPLASH_ACCESS_KEY = '';
-    try {
-        const response = await axios.get('https://api.unsplash.com/search/photos', {
-            params: {
-                query: query, // Your search term, e.g., 'museum'
-                per_page: 2, // Number of images to return
-            },
-            headers: {
-                Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`
-            }
-        });
->>>>>>> cf461aebd65d1ec8d011ccaa24abeb04c63e861d
 
     const images = response.data.results;
     if (images.length > 0) {
@@ -149,46 +114,7 @@ console.log(city, museums);
   const geminiData = await geminiResponse.json();
   const geminiText = geminiData.candidates[0].content.parts[0].text;
 
-  // const geminiInfo = geminiText
-  //   .split("**Name:**")
-  //   .slice(1)
-  //   .map((item) => {
-  //     const details = item.split("\n").map((line) => line.trim());
-  //     return {
-  //       name: details[0] || "Name not available",
-  //       address:
-  //         details
-  //           .find((detail) => detail.startsWith("**Address:**"))
-  //           ?.split(":")[1]
-  //           ?.trim() || "Address not available",
-  //       price:
-  //         details
-  //           .find((detail) => detail.startsWith("**Price:**"))
-  //           ?.split(":")[1]
-  //           ?.trim() || "Price not available",
-  //       openingTime:
-  //         details
-  //           .find((detail) => detail.startsWith("**Opening Time:**"))
-  //           ?.split(":")[1]
-  //           ?.trim() || "Opening time not available",
-  //       closingTime:
-  //         details
-  //           .find((detail) => detail.startsWith("**Closing Time:**"))
-  //           ?.split(":")[1]
-  //           ?.trim() || "Closing time not available",
-  //       description:
-  //         details
-  //           .find((detail) => detail.startsWith("**Description:**"))
-  //           ?.split(":")[1]
-  //           ?.trim() || "Description not available",
-  //       imageLink:
-  //         details
-  //           .find((detail) => detail.startsWith("**Image Link:**"))
-  //           ?.split(":")[1]
-  //           ?.trim() || "Image not available",
-  //     };
-  //   });
-
+  
 
 
 
