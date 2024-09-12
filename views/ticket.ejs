@@ -46,6 +46,7 @@
             <!-- </form> -->
             <script>
               const data = <%- JSON.stringify(data) %>;
+              console.log('data',data);
               document.getElementsByTagName('button')[0].addEventListener('click', function() {
                 console.log(data);
                 const url = `http://localhost:8000/generatepdf?${new URLSearchParams(data).toString()}`;

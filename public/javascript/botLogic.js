@@ -1,4 +1,3 @@
- 
 
 let ExistingQeustionsAndResponses = [];
 let temperaryQuestions = [];
@@ -14,6 +13,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const dropBox = document.querySelector(".dropBox");
 
   titleBtn.addEventListener("click", function () {
+    
     if (dropBox.style.display === "none" || dropBox.style.display === "") {
       dropBox.style.display = "block";
     } else {
@@ -196,7 +196,7 @@ const handleBookTicketClick = async (content) => {
   displayLocation('Enter Your Email');
   const userEmail = await takeUserInput();
   console.log('user info', userName, userEmail, totalMembersCount, Members);
-
+const members =Members.map(member => member.name).join(',')
   // Send a POST request to the backend to book a ticket
   const queryParams = new URLSearchParams({
     content,
@@ -207,7 +207,7 @@ const handleBookTicketClick = async (content) => {
     closingTime: content.closingTime,
     price: content.price,
     addreess: content.address,
-    members: Members.join(','), // Convert array to comma-separated string
+    members: members, // Convert array of objects to comma-separated string of names
     date,
   }).toString();
   
