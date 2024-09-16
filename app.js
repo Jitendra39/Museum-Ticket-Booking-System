@@ -3,17 +3,29 @@ const fs = require('fs');
 const http = require('http');
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
-
+require('dotenv').config();
 const path = require('path');
-const pdf = require('html-pdf');
-const ejs = require('ejs');
-
+ 
+const { generateTicketId } = require("./utils");
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
-// const {router} = require('./routes/allApis');
+ 
 const {router: botRouter} = require('./routes/botApi');
 const { downloadPDF } = require('./controllers/ticket');
+const { default: mongoose } = require('mongoose');
+const { ticketCreated } = require('./controllers/ticketIdAdder');
+
+// mongoose.set('debug', true);
+
+mongoose.connect(process.env.MONGO_URL, {
+  connectTimeoutMS: 60000,
+  socketTimeoutMS: 45000
+}).then(() => {
+  console.log("MongoDB is connected");
+}).catch(err => {
+  console.error("Error connecting to MongoDB:", err);
+});
 
 app.set("view engine", "ejs")
 app.set('views', path.join(__dirname, 'views'));
@@ -37,21 +49,28 @@ app.get('/bot', (req,res) => {
     res.render("bot")
 })
 
+app.get('/about', (req,res) => {
+  res.render('about')
+})
 
 
+app.get('/ticket', async(req, res) => {
+  try {
+    const data = await ticketCreated(req);
+    console.log(data);
 
-app.get('/ticket', (req, res) => {
-  // Retrieve the query parameters (data sent from POST request)
-  const data = req.query;
-
-  // Render an HTML template with the data
-  res.render("ticket", { data }, (err, html) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).send("An error occurred while rendering the ticket.");
-    }
-    res.send(html);
-  });
+    // Render an HTML template with the data
+    res.render("ticket", { data }, (err, html) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send("An error occurred while rendering the ticket.");
+      }
+      res.send(html);
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("An error occurred while processing the ticket.");
+  }
 });
 
 app.get('/generatepdf',downloadPDF)
@@ -62,36 +81,4 @@ app.use("/api", botRouter);
 
 
 server.listen(8000, ()=> console.log("Server Stared!"));
-
-
-
-
-
-
-
-
-
  
-
-
-
-// app.post('/ticket', (req, res) => {
-
-//   // const cssContent = fs.readFileSync(path.join(__dirname, 'public', 'styles', 'ticket.css'), 'utf8');
-//   console.log(req.body);
-//   const data = {
-//     name: "Lokmanya Tilak Museum",
-//     address: "737/3A, Laxmi Road, Pune, Maharashtra 411002",
-//     price: "Adults: INR 10, Children: INR 5",
-//     openingTime: "10:00 AM",
-//     closingTime: "5:00 PM",
-//     description: "The Lokmanya Tilak Museum is a tribute to the renowned Indian nationalist and social reformer Bal Gangadhar Tilak. Established in 1962, the museum houses a vast collection of artifacts and memorabilia related to Tilak's life and work.",
-//     city: "Pune",
-//     email: "example@example.com",
-//     members: ["Member 1: John Doe", "Member 2: Jane Doe"]
-//   };
-//   const queryParams = new URLSearchParams(data).toString();
-
-//   // Redirect to /ticket with query params
-//   res.redirect(`/ticket?${queryParams}`);
-// });

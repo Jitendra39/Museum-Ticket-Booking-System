@@ -1,278 +1,50 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+.ticket-card {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border: none;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 }
 
-body {
-    font-family: Poppins;
-    margin: 0;
-    background-color: #010101;
-    color: #eee;
+.ticket-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
 }
 
-body, html {
-    height: 100%;
-    margin: 0;
-}
-
-.background {
-    background-color: rgb(0, 0, 0);
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-}
-
-.slide-up-image {
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transform: translateY(100%);
-  animation: slideUpFadeIn 2s ease-in-out forwards;
-}
-
-@keyframes slideUpFadeIn {
-    0% {
-        opacity: 0;
-        transform: translateY(100%);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 85%;
-    padding: 20px;
-    background: transparent;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 99;
-    margin: 0 auto;
-    right: 0;
-    opacity: 0;
-    transform: translateY(-100%);
-    animation: slideDownFadeIn 2s ease-in-out forwards;
-    animation-delay: 0s;
-}
-
-@keyframes slideDownFadeIn {
-    0% {
-        opacity: 0;
-        transform: translateY(-100%);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.logo {
-    font-size: 32px;
-    color: white;
-    text-decoration: none;
+.card-title {
+    color: #2c3e50;
     font-weight: 700;
-    margin-right: auto;
 }
 
-.navbar {
-    display: flex;
+.qr-code {
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
 }
 
-.navbar a {
-    position: relative;
-    font-size: 18px;
-    color: white;
-    font-weight: 500;
-    text-decoration: none;
-    margin-left: 40px;
+.qr-code:hover {
+    transform: scale(1.05);
 }
 
-.navbar a::before {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: white;
-    transition: .3s;
-}
-
-.navbar a:hover::before {
-    width: 100%;
-}
-
-.container{
-    top: 23%;
-  position: relative;
-}
-
-/* upr-heading */
-.upr-heading {
-    text-align: center;
-    position: relative;
-    margin-bottom: 20px; /* Adjusted for responsive spacing */
-    color: white;
-    animation: slideUpFadeIn 1s ease-out forwards;
-    z-index: 1;
-}
-
-.upr-heading h1 {
-    font-family: Poppins;
-    font-size: 2.3em;
-    margin: 0;
-}
-
-.upr-heading p {
-    font-family: Poppins;
-    font-size: 1em;
-    margin: 0;
-    animation: slideUpFadeIn 1s ease-out 0.5s forwards;
-}
-
-/* Ticket layout */
-#ticket {
-    display: flex;
-    width: 90%;
-    max-width: 1030px;
-    height: auto;
-    background-color: #1a1717;
-    position: relative;
-    margin: 20px auto;
-    color: white;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 4px solid gray;
-    box-shadow: 0 0 37px rgb(0, 0, 0);
-    z-index: 1;
-    flex-direction: column;
-    padding: 20px;
-}
-
-@media (min-width: 768px) {
-    #ticket {
-        flex-direction: row;
-        height: 380px;
+@media (max-width: 768px) {
+    .ticket-card {
+        margin-top: 2rem;
     }
 }
 
-
-.ticket-left,
-.ticket-right {
-    
-    flex: 1;
-    padding: 20px;
+#ticketId {
+    font-weight: 600;
+    color: #3498db;
 }
 
-.header-t {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+#bookingDate, #visitorName {
+    font-weight: 600;
 }
 
-.yellow-box {
-    width: 50px;
-    height: 50px;
-    background-color: #F4A300;
+.card-body p {
+    margin-bottom: 0.5rem;
 }
 
-.header-t h1 {
-    font-size: 24px;
+.text-muted {
+    font-size: 0.8rem;
 }
 
-.divider {
-    width: 100%;
-    background-color: #F4A300;
-    border-bottom: 2px dashed white;
-    margin: 10px 0;
-}
-
-@media (min-width: 768px) {
-    .divider {
-        width: 2px;
-        border-bottom: none;
-        border-left: 2px dashed white;
-        margin: 0;
-    }
-}
-
-.ticket-info {
-    margin-top: 20px;
-}
-
-.ticket-info p {
-  margin: 10px 0;
-  font-size: 16px;
-}
-
-.ticket-info .dashed {
-  color: #ccc;
-}
-
-.ticket-right h1 {
-  text-align: center;
-  font-size: 24px;
-}
-
-/* PDF DOWNLOAD BUTTON */
-button {
-  padding: 17px 40px;
-  border-radius: 50px;
-  cursor: pointer;
-  border: 0;
-  background-color: white;
-  box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  font-size: 15px;
-  transition: all 0.5s ease;
-  position: relative;  
-  left: 50%; 
-  transform: translateX(-50%);
-  z-index: 2; 
-  opacity: 0;
-  animation: slideDownFadeInButton 2s ease-in-out forwards;
-  animation-delay: 1.66s;
-}
-
-@keyframes slideDownFadeInButton {
-    0% {
-        opacity: 0;
-        transform: translateY(20px) translateX(-50%);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0) translateX(-50%);
-    }
-}
-
-button:hover {
-  letter-spacing: 3px;
-  background-color: #474747;
-  color: hsl(0, 0%, 100%);
-  box-shadow: rgb(87, 84, 92) 0px 0px 0px 0px;
-}
-
-button:active {
-  letter-spacing: 3px;
-  background-color: #474747;
-  color: hsl(0, 0%, 100%);
-  box-shadow: rgb(87, 84, 92) 0px 0px 0px 0px;
-  transform: translateY(10px) translateX(-50%);
-  transition: 100ms;
-}

@@ -1,279 +1,404 @@
-*{
-  margin: 0;
-  padding: 0;
-background-color: rgb(255, 255, 255);
-}
 @import url('https://fonts.googleapis.com/css2?family=Nerko+One&display=swap');
-
-#container{
+*{
+    margin: 0;
+    padding: 0;
+  /* background-color: rgb(255, 255, 255); */
+  }
+  
+  
+  /* #container{
+   
+    width: 100vw;
+    height: 100vh;
+    background-image: linear-gradient(to bottom, #6d1ffd, #87bff4);
+    
+    display: flex;
+    
+    margin: 0 auto;
+   
+    flex-direction: column;
+  } */
+  
+  .bot{
+    background: #9b9b9b;
+    display: flex;
+    margin: 0 auto;
+    flex-direction: column;
+    position: relative;
+    height: 82vh;
+    border-radius: 5px;
+  }
+  
+  header{
  
-  width: 100vw;
-  height: 100vh;
-  background-image: linear-gradient(to bottom, #6d1ffd, #87bff4);
-  /* background-color: #841c1c; */
-  display: flex;
-  /* justify-content: center; */
-  margin: 0 auto;
-  /* position: relative; */
-  flex-direction: column;
-}
-
-.bot{
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  min-width: 400px;
-  max-width: 405px;
-  height: 90vh;
-  max-height: 700px;
-  background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);
-  /* background-color: #841c1c; */
-  display: flex;
-  /* justify-content: center; */
-  margin: 0 auto;
-  /* position: relative; */
-  flex-direction: column;
-}
-
-header{
- border-radius: 10px;
-  width: 95%;
-  height: 10%;
-  display: flex;
-  /* justify-content: center; */
-  align-items: center;
-  color: white;
-  /* font-size: 30px; */
-  padding: 10px;
-  background-color: #a6c1ee;
-  display: flex;
+    height: 10%;
+    display: flex;
+    align-items: center;
+    color: white;
+    padding: 10px;
+    background-color: #242424;
+    display: flex;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+; 
+  }
+    
+  .content1{
+    background-color: transparent;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    width: 88%;
+    position: relative;
+    padding-left: 17px;
+  }
   
-}
+  .content1 .name{
+    background-color: transparent;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 500;
+    font-style: normal;
+    font-family: Poppins;
+   
+  }
   
-.content{
- 
-background-color: transparent;
-/* color: black; */
-display: flex;
-flex-direction: column;
-text-align: center;
-width: 90%;
-}
-
-.content .name{
-  background-color: transparent;
-  color: black;
-  font-size: 1.5rem;
-  font-family: 'GT America', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  .content1 .decreption{
+     color: white;
+     background-color: transparent;
+    font-size: 1rem;
+    font-family: Poppins;
+    font-weight: 500;
+    font-style: normal;
+    margin-left: 5px;
+  }
   
-  font-weight: 900;
-  font-style: normal;
- 
-}
+  .close i{
+    color: #221818;
+    font-size: 1.5rem;
+    background-color: transparent;
+    
+  }
 
-.content .decreption{
-   color: black;
-   background-color: transparent;
-  font-size: 1rem;
-  font-family: 'GT America', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  font-weight: 500;
-  font-style: normal;
-  margin-left: 5px;
-}
-
-.close i{
-  color: #221818;
-  font-size: 1.5rem;
-  background-color: transparent;
   
-}
-
-
-
-
-
-
-/* Chat box css */
-main{
-  height: 90%;
-  background-color: transparent;
-  overflow-y: scroll;
+  /* Chat box css */
+  main{
+    height: 90%;
+    /* background-color: transparent; */
+    overflow-y: scroll;
+  }
   
-}
-
-.message-box {
-  background-color: transparent;
-  width: fit-content;
-  max-width: 90%;
-  padding: 5px 10px;
-  /* margin-bottom: 5px; */
-  border-radius: 10px;
-}
-.message-box.left {
-  background-color: transparent;
-  color: #221818;
-  font-size: 13px;
-  right: 0;
-}
-.message-box.left p{
-  background-color: rgba(255, 255, 255,0.4) ;
-  padding: 10px;
-  font-family: 600;
-  font-size: 1rem;
-  border-radius: 5px;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Question button css */
-
-.Questions{
-  background-color: transparent;
-  margin-top: 8px;
-}
-
-.message-box.left.Question{
-  padding: 2px 19px;
-  cursor: pointer;
-
-  color: #221818;
-  font-size: 13px;
-  /* right: 0; */
-}
-
-.message-box.left.Question p{
-  padding: 17px 18px;
-  border-radius: 30px;
-  background-color: rgb(228 162 247 / 40%);
-  border: 2px #5c9900 solid;
-}
-
-
-
-
-
-
-/* Message at left side */
-.opponentResponse{
-  background-color: transparent;
-
-}
-.rightSideResponse{
-  width: 98%;
-  background-color: transparent;
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: flex-start;
-}
-.message-box.right {
-  background-color: transparent;
-  color: #221818;
-  font-size: 13px;
-  right: 0;
-}
-.message-box.right p{
-  padding: 14px;
-  font-family: 600;
-  background-color: rgba(214 246 251 / 60%);
-  font-size: 1.1rem;
-  border-radius: 5px;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Bot footer */
-.footer{
+  .message-box {
+    background-color: transparent;
+    width: fit-content;
+    max-width: 90%;
+    padding: 5px 10px;
+    /* margin-bottom: 5px; */
+    border-radius: 10px;
+  }
+  .message-box.left {
+    background-color: transparent;
+    color: #221818;
+    font-size: 13px;
+    right: 0;
+  }
+  .message-box.left p{
+    background-color: rgba(255, 255, 255,0.4) ;
+    padding: 10px;
+    font-family: 600;
+    font-size: 1rem;
+    border-radius: 5px;
+  }
   
-  visibility: hidden;
-  background-color: transparent;
-  /* width: 100%; */
-  height: 10%;
-  min-height: 48px;
-  max-height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 30px;
-  /* padding: 10px; */
-  background-color: #a6c1ee;
-  display: flex;
-}
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /* Question button css */
+  
+  .Questions{
+    background-color: transparent;
+    margin-top: 8px;
+  }
+  
+  .message-box.left.Question{
+    padding: 2px 19px;
+    cursor: pointer;
+  
+    color: #221818;
+    font-size: 13px;
+    /* right: 0; */
+  }
+  
+  .message-box.left.Question p{
+    padding: 17px 18px;
+    border-radius: 30px;
+    background-color: #ababab;
+    border: 2px #424242 solid;
+  }
+  
+  
+  
+  
+  
+  
+  /* Message at left side */
+  .opponentResponse{
+    background-color: transparent;
+  
+  }
+  .rightSideResponse{
+    width: 98%;
+    background-color: transparent;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+  }
+  .message-box.right {
+    background-color: transparent;
+    color: #221818;
+    font-size: 13px;
+    right: 0;
+  }
+  .message-box.right p{
+    padding: 14px;
+    font-family: 600;
+    background-color: rgba(53, 53, 53, 0.6);
+    font-size: 1.1rem;
+    border-radius: 5px;
+    color: white;
+    font-family: Poppins;
 
-.chat-input {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  /* padding: 10px; */
-  border-top: 1px solid #ccc;
-}
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /* Bot footer */
+  .footer{
+    
+    visibility: hidden;
+    background-color: transparent;
+    height: 10%;
+    min-height: 48px;
+    max-height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 30px;
+    background-color: #9c9c9c;
+    display: flex;
+  }
+  
+  .chat-input {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    /* padding: 10px; */
+    border-top: 1px solid #ccc;
+  }
+  
+  .message-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 5px;
+    color: #221818;
+    font-size: 24px;
+  }
+  
+  .send-button {
+    border: none;
+    outline: none;
+    background-color: #333;
+    color: #fff;
+    font-size: 14px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .send-button:hover {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /* museum details card */
+  .titleDropBox{
+    background-color: transparent;
+    display: none;
+  }
+  
+  .museumDetails{
+    border-radius: 4px;
+    background-color:white;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    margin: 10px auto 0 auto;
+    padding: 4px 4px 4px 14px;
+    
+  }
+  
+  .museumDetails .titleBtn{
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    font-family: poppins;
+  }
+  
+  .museumDetails .titleBtn .title{
+    width: 91%;
+    align-items: flex-start;
+  }
+  
+  
+  .museumDetails .titleBtn .btn{
+    width: 5%;
+    background-color: transparent;
+    color: #221818;
+    /* font-size: 1.5rem; */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  
+  }
+  
+  
+  
+  
+  .dropBox {
+    display: none;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: max-height 0.3s ease-out;
+    overflow: hidden;
+  }
+  
+  .dropBoxContent {
+    padding: 8px;
+  }
+  
+  .content {
+    margin-bottom: 4px;
+    display: flow-root;
+  }
+  
+  .contentTitle {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .contentText {
+    color: #555;
+  }
+  
+  .titleBtn {
+    cursor: pointer;
+  }
+  /* From Uiverse.io by Gaurav-WebDev */ 
+  .button {
+    height: 50px;
+    width: 150px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
+  }
+  
+  .button:hover {
+    box-shadow: .5px .5px 150px #252525;
+  }
+  
+  .type1::after {
+    content: "Thanks";
+    height: 50px;
+    width: 150px;
+    background-color: #008080;
+    color: #fff;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    transform: translateY(50px);
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s ease-in-out;
+  }
+  
+  .type1::before {
+    content: "Book Now";
+    height: 50px;
+    width: 150px;
+    background-color: #fff;
+    color: #008080;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    transform: translateY(0px) scale(1.2);
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s ease-in-out;
+  }
+  
+  .type1:hover::after {
+    transform: translateY(0) scale(1.2);
+  }
+  
+  .type1:hover::before {
+    transform: translateY(-50px) scale(0) rotate(120deg);
+  }
 
-.message-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  padding: 5px;
-  color: #221818;
-  font-size: 24px;
-}
-
-.send-button {
-  border: none;
-  outline: none;
-  background-color: #333;
-  color: #fff;
-  font-size: 14px;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.send-button:hover {
-  background-color: rgb(255, 255, 255);
-  color: rgb(0, 0, 0);
-  box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-/* museum details card */
-.titleDropBox{
-  background-color: transparent;
+.titleDropBox {
+  background-color: #9a9a9a; 
   display: none;
 }
 
-.museumDetails{
+.museumDetails {
   border-radius: 4px;
-  background-color:white;
+  background-color: #e0e0e0; 
   width: 90%;
   display: flex;
   flex-direction: column;
@@ -281,42 +406,36 @@ main{
   justify-content: center;
   margin: 10px auto 0 auto;
   padding: 4px 4px 4px 14px;
-  
 }
 
-.museumDetails .titleBtn{
+.museumDetails .titleBtn {
   display: flex;
   justify-content: space-between;
   font-size: 18px;
   font-family: poppins;
 }
 
-.museumDetails .titleBtn .title{
+.museumDetails .titleBtn .title {
   width: 91%;
   align-items: flex-start;
+  color: #333; 
 }
 
-
-.museumDetails .titleBtn .btn{
+.museumDetails .titleBtn .btn {
   width: 5%;
   background-color: transparent;
-  color: #221818;
-  /* font-size: 1.5rem; */
+  color: #333;
   cursor: pointer;
   display: flex;
   align-items: center;
-
 }
-
-
-
 
 .dropBox {
   display: none;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
+  background-color: #f9f9f9; 
+  border: 1px solid #ccc; 
   padding: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
   transition: max-height 0.3s ease-out;
   overflow: hidden;
 }
@@ -333,16 +452,13 @@ main{
 .contentTitle {
   font-weight: bold;
   margin-bottom: 5px;
+  color: #333; 
 }
 
 .contentText {
-  color: #555;
+  color: #666; 
 }
 
-.titleBtn {
-  cursor: pointer;
-}
-/* From Uiverse.io by Gaurav-WebDev */ 
 .button {
   height: 50px;
   width: 150px;
@@ -355,14 +471,14 @@ main{
 }
 
 .button:hover {
-  box-shadow: .5px .5px 150px #252525;
+  box-shadow: .5px .5px 150px #444; 
 }
 
 .type1::after {
   content: "Thanks";
   height: 50px;
   width: 150px;
-  background-color: #008080;
+  background-color: #555;
   color: #fff;
   position: absolute;
   top: 0%;
@@ -380,8 +496,8 @@ main{
   content: "Book Now";
   height: 50px;
   width: 150px;
-  background-color: #fff;
-  color: #008080;
+  background-color: #f0f0f0; 
+  color: #555; 
   position: absolute;
   top: 0%;
   left: 0%;

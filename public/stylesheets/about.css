@@ -1,0 +1,206 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@100..900&display=swap');
+
+body {
+    /* font-family: Poppins; */
+    margin: 0;
+    background-color: #010101;
+    color: #eee;
+}
+
+body,
+html {
+    height: 100%;
+    margin: 0;
+}
+
+.background {
+    background-color: black;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.slide-up-image {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: translateY(100%);
+    animation: slideUpFadeIn 2s ease-in-out forwards;
+}
+
+@keyframes slideUpFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+svg {
+    width: 25px;
+}
+
+
+.header {
+    font-family: Poppins;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 85%;
+    padding: 20px;
+    background: transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 99;
+    margin: 0 auto;
+    right: 0;
+    opacity: 0;
+    transform: translateY(-100%);
+    animation: slideDownFadeIn 2s ease-in-out forwards;
+    animation-delay: 0s;
+}
+
+@keyframes slideDownFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.logo {
+    font-size: 32px;
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    margin-right: auto;
+}
+
+.navbar {
+    display: flex;
+}
+
+.navbar a {
+    position: relative;
+    font-size: 18px;
+    color: white;
+    font-weight: 500;
+    text-decoration: none;
+    margin-left: 40px;
+}
+
+.navbar a::before {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: .3s;
+}
+
+.navbar a:hover::before {
+    width: 100%;
+}
+
+.box-1 {
+    background-color: #000000;
+    height: 80vh;
+    position: relative;
+    /* Relative positioning to allow absolute positioning of children */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+/* 
+@keyframes slideUpFadeInLogin {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) translateY(50%);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) translateY(0);
+    }
+}
+.blurbg{
+    position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1300px;
+  height: 600px;
+  padding: 40px;
+  background: rgba(0, 0, 0, .9);
+  box-sizing: border-box;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, .6);
+  border-radius: 10px;
+  opacity: 0.8;
+  transform: translate(-50%, -50%) translateY(50%);
+  animation: slideUpFadeInLogin 1.5s ease-in-out 1s forwards;
+} */
+
+
+.divider {
+    height: 8px;
+    background-color: rgb(38, 37, 37);
+    position: relative;
+    z-index: 10;
+    margin-top: 0;
+}
+
+
+.box1 {
+    background: #000;
+    height: 55vh;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box1 .box1-components {
+    width: 83%;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    align-items: center;
+}
+
+.box1 .box1-components .paras{
+    height: auto;
+    width: 600px;
+}
+
+.paras :first-child {
+    font-family: Poppins;
+    font-size: larger;
+    font-weight: bold;
+}
+
+.paras :nth-child(2) {
+    font-family: Poppins;
+}
+
+.box1 .box1-components .ticksyco {
+    width: 589px;
+    height: auto;
+ 
+}

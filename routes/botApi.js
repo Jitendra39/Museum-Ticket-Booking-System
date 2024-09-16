@@ -19,8 +19,8 @@ router.get('/test', async (req, res) => {
     method: 'GET',
     url: 'https://google-map-places.p.rapidapi.com/maps/api/place/nearbysearch/json',
     params: {
-      location: '18.5171968, 73.8623488', // Coordinates for Nagpur
-      radius: '160000', // 5 km radius
+      location: '21.146633, 79.088860', // Coordinates for Nagpur
+      radius: '2405665.', // 5 km radius
       type: 'museum',
       language: 'en'
     },

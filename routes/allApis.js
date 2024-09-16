@@ -7,6 +7,4 @@ router.get('/', (req,res) => {
 })
 
 
-
 exports.router = router;
-

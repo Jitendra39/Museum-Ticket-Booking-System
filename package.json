@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx nodemon app"
   },
   "keywords": [],
   "author": "",
@@ -14,11 +14,16 @@
     "axios": "^1.7.7",
     "body-parser": "^1.20.3",
     "canvas": "^2.11.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
+    "env": "^0.0.2",
     "express": "^4.19.2",
     "html-pdf": "^3.0.1",
     "http": "^0.0.1-security",
     "mongoose": "^8.6.1",
-    "socket.io": "^4.7.5"
+    "qrcode": "^1.5.4",
+    "socket.io": "^4.7.5",
+    "uuid": "^10.0.0"
   }
 }
