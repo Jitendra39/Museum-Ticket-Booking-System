@@ -25,7 +25,7 @@ router.get('/test', async (req, res) => {
       language: 'en'
     },
     headers: {
-      'x-rapidapi-key': '94fe3e13cdmshbf69966db19467ap1d7caejsn0f9e693a7b76',
+      'x-rapidapi-key': '',
       'x-rapidapi-host': 'google-map-places.p.rapidapi.com'
     }
   };
