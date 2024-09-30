@@ -29,7 +29,7 @@ const getMuseumNameImage = async (req, res) => {
  
 
 async function getCityCoordinates(city) {
-  const openTripMapApiKey = '5ae2e3f221c38a28845f05b6a04d63d52bbaff23ce1750f6ee143cb8';// Replace with your OpenTripMap API key
+  const openTripMapApiKey = ' ';// Replace with your OpenTripMap API key
   const geoResponse = await fetch(
     `https://api.opentripmap.com/0.1/en/places/geoname?name=${city}&apikey=${openTripMapApiKey}`
   );
@@ -40,7 +40,7 @@ async function getCityCoordinates(city) {
 
 async function fetchMuseums(lat, lon, population) {
   console.log(population);
-  const openTripMapApiKey = '5ae2e3f221c38a28845f05b6a04d63d52bbaff23ce1750f6ee143cb8'; // Replace with your OpenTripMap API key
+  const openTripMapApiKey = ' '; // Replace with your OpenTripMap API key
   const radius = (typeof population === 'number' && population > 0) ? Math.min(50000, Math.max(10000, population * 0.05)) : 50000; // 50 km radius or 5% of population, whichever is smaller, with a minimum of 10 km
   console.log("Fetching museums with radius", radius / 1000, "km", radius);
   const kinds = "museums";
@@ -58,7 +58,7 @@ async function fetchMuseums(lat, lon, population) {
 
 async function searchImages(query) {
   console.log("Searching for images of", query);
-  const UNSPLASH_ACCESS_KEY = "GYRI3vP7HKIaJSeoReKCFDDDHmEBC04tfs0EYoqX1b8";
+  const UNSPLASH_ACCESS_KEY = " ";
   try {
     const response = await axios.get("https://api.unsplash.com/search/photos", {
       params: {
@@ -85,7 +85,7 @@ async function searchImages(query) {
 async function fetchMuseumDetails(req, res) {
   const { city, museums } = req.body;
 console.log(city, museums);
-  const geminiApiKey = "AIzaSyA-dEa42tYpukr3c71IlT_ZvkR16YHLt5w"; // Replace with your Gemini API key
+  const geminiApiKey = " "; // Replace with your Gemini API key
   // const museumNames = museums?.map((museum) => museum.name).join(", ");
   const museumNames = museums
 
